@@ -22,6 +22,7 @@
         <module>springaopdemo</module>
         <module>redisdemo</module>
         <module>aopredisdemo</module>
+        <module>javamysql</module>
     </modules>
 
     <properties>
