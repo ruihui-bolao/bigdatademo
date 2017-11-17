@@ -11,10 +11,13 @@
 
     <artifactId>javamysql</artifactId>
 
+<<<<<<< HEAD
     <dependencies>
 
 
     </dependencies>
 
+=======
+>>>>>>> origin/master
 
 </project>
