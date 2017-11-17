@@ -1,0 +1,1 @@
+将 spring aop 和 redis 整合在一块 ，aop切点处理的信息和结果保存到redis中。

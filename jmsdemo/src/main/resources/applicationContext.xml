@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config />
+    <context:component-scan base-package="com.sdyc.springjms.demo"></context:component-scan>
+
+    <!-- 真正可以产生Connection的ConnectionFactory，由对应的 JMS服务厂商提供 -->
+    <bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="tcp://192.168.1.116:61616" />
+    </bean>
+
+    <!-- 通过往PooledConnectionFactory注入一个ActiveMQConnectionFactory可以用来将Connection，Session和MessageProducer池化这样可以大大减少我们的资源消耗， -->
+    <bean id="pooledConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory">
+        <property name="connectionFactory" ref="targetConnectionFactory" />
+        <property name="maxConnections" value="10" />
+    </bean>
+
+    <bean id="connectionFactory"
+          class="org.springframework.jms.connection.SingleConnectionFactory">
+        <property name="targetConnectionFactory" ref="pooledConnectionFactory" />
+    </bean>
+
+    <!-- 配置生产者：配置好ConnectionFactory之后我们就需要配置生产者。生产者负责产生消息并发送到JMS服务器，这通常对应的是我们的一个业务逻辑服务实现类。 但是我们的服务实现类是怎么进行消息的发送的呢？这通常是利用Spring为我们提供的JmsTemplate类来实现的， 所以配置生产者其实最核心的就是配置进行消息发送的JmsTemplate。对于消息发送者而言，它在发送消息的时候要知道自己该往哪里发， 为此，我们在定义JmsTemplate的时候需要往里面注入一个Spring提供的ConnectionFactory对象 -->
+    <!-- Spring提供的JMS工具类，它可以进行消息发送、接收等 -->
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <!-- 这个connectionFactory对应的是我们定义的Spring提供的那个ConnectionFactory对象 -->
+        <property name="connectionFactory" ref="connectionFactory" />
+    </bean>
+
+    <!-- 在真正利用JmsTemplate进行消息发送的时候，我们需要知道消息发送的目的地，即destination。 在Jms中有一个用来表示目的地的Destination接口，它里面没有任何方法定义，只是用来做一个标识而已。当我们在使用JmsTemplate进行消息发送时没有指定destination的时候将使用默认的Destination。 默认Destination可以通过在定义jmsTemplate bean对象时通过属性defaultDestination或defaultDestinationName来进行注入， defaultDestinationName对应的就是一个普通字符串 -->
+    <!--这个是队列目的地，点对点的 -->
+    <bean id="queueDestination" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg>
+            <value>NTF_MOCK_INPUT</value>
+        </constructor-arg>
+    </bean>
+    <!--这个是回复队列，点对点的 -->
+    <bean id="responseQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg>
+            <value>NTF_MOCK_OUTPUT</value>
+        </constructor-arg>
+    </bean>
+
+</beans>

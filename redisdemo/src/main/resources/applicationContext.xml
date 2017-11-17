@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop.xsd
+	     ">
+
+    <import resource="redisContext.xml"/>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+        <property name="ignoreResourceNotFound" value="true" />
+        <property name="ignoreUnresolvablePlaceholders" value="true" />
+        <property name="locations">
+            <list>
+                <value>classpath:redis.properties</value>
+            </list>
+        </property>
+    </bean>
+
+
+    <!--  spring redis 实现 spring aop 的相关配置  start -->
+    <bean id="redisKeyBean" class="com.hui.redis.aop.RedisKeyBean">
+        <property name="orgId" value="${org.id}"/>
+        <property name="redisTopic" value="${Test.topic}"/>
+        <property name="startTime" value="${Test.StartTime}"/>
+        <property name="lastTime" value="${Test.lasttime}"/>
+    </bean>
+    <!--  spring redis 实现 spring aop 的相关配置  end -->
+
+
+    <!-- spring redis 实现消息队列的相关配置 start -->
+    <!-- 实现类 -->
+    <bean id="messageDelegateListener" class="com.fgoods.siteanalyzer.main.listener.impl.MessageDelegateListenerImpl" ></bean>
+
+</beans>

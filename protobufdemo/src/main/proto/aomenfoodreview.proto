@@ -1,0 +1,20 @@
+syntax = "proto2";
+option java_package = "com.sdyc.proto.aop";
+option java_outer_classname = "AomenFoodReview";
+message AomenFood {
+    optional string shopId = 1;
+    optional string shopName = 2;
+    optional string shopImg = 3;
+    optional double shopScore = 4;
+    optional int32 cntReplied = 5;
+    optional string createdAt = 6;
+    optional string postId = 7;
+    optional string postTitle = 8;
+    optional string postContentText = 9;
+    optional string userId = 10;
+    optional string userName = 11;
+    optional string userImg = 12;
+    optional string postUrl = 13;
+    optional double reScore = 14;
+    optional string mediaName = 15;
+}

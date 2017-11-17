@@ -1,0 +1,83 @@
+@namespace("com.sdyc.jise")
+protocol JISEProtocol {
+
+    /**
+	AomenFoodReview
+	*/
+	record AomenFoodReview {
+		/**
+		店铺id
+		*/
+		union { null, string } shopId;
+		
+		/**
+		店铺名称
+		*/
+		union { null, string } shopName;
+		
+		/**
+		店铺图片
+		*/
+		union { null, string } shopImg;
+		
+		/**
+		店铺评分
+		*/
+		union { null, double } shopScore;
+		
+		/**
+		店铺评论数
+		*/
+		union { null, int } cntReplied;
+		
+		/**
+		评论时间
+		*/
+		union { null, string } createdAt;
+		
+		/**
+		评论id
+		*/
+		union { null, string } postId;
+		
+		/**
+		评论标题
+		*/
+		union { null, string } postTitle;
+		
+		/**
+		评论内容
+		*/
+		union { null, string } postContentText;
+		
+		/**
+		评论用户id
+		*/
+		union { null, string } userId;
+		
+		/**
+		评论用户昵称
+		*/
+		union { null, string } userName;
+		
+		/**
+		评论用户头像
+		*/
+		union { null, string } userImg;
+		
+		/**
+		帖子链接地址
+		*/
+		union { null, string } postUrl;
+		
+		/**
+		评论分数
+		*/
+		union { null, double } reScore;
+		
+		/**
+		媒体名称
+		*/
+		union { null, string } mediaName;
+	}
+}

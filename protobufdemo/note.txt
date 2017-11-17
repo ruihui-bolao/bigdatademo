@@ -1,0 +1,1 @@
+通过 maven 编译直接 将.proto 的配置文件转换成class.

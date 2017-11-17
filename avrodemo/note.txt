@@ -1,0 +1,3 @@
+avro scheme 的文件有三种：.avdl、.avsc等三种文件
+只需将文件放在src/main/avro 目录下，只需要执行maven complie 就会自动生成 Java 文件。
+在读取avro 文件的时候，需要avro scheme, 导入对应的Java.class 或者是对应的avro scheme 文件。

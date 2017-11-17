@@ -1,0 +1,3 @@
+#Dubbo Registry Cache
+#Thu Nov 09 13:53:23 CST 2017
+com.crh.dubbo.demo.service.DubboService=empty\://192.168.102.38\:20880/com.crh.dubbo.demo.service.DubboService?anyhost\=true&application\=dubbo-demo-provider&category\=configurators&check\=false&dubbo\=2.5.3&interface\=com.crh.dubbo.demo.service.DubboService&methods\=demoService&payload\=20971520&pid\=12588&side\=provider&timestamp\=1510206803143
