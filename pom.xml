@@ -24,6 +24,7 @@
         <module>aopredisdemo</module>
         <module>javamysql</module>
         <module>sparksqludf</module>
+        <module>sparkrdd</module>
     </modules>
 
     <properties>
