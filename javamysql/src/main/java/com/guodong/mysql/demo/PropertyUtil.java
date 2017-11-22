@@ -15,6 +15,13 @@ import java.util.Properties;
  *  java  properties  工具类
  */
 public class PropertyUtil {
+
+    /**
+     * 加载Properties的配置文件
+     *
+     * @param path 配置文件路径
+     * @return Properties
+     */
     public static Properties loadProperties(String path) {
         ClassLoader classLoader = getClassLoader();
         URL resource =  classLoader.getResource(path);
@@ -37,8 +44,11 @@ public class PropertyUtil {
         }
     }
 
-
-
+    /**
+     *  获取文件的目录结构
+     * @param dir 文件的目录路径
+     * @param floor
+     */
     public static void printListFile(File dir, int floor) {
         File[] files = dir.listFiles();
         if(files == null) {

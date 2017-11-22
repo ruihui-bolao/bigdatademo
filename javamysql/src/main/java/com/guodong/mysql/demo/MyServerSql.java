@@ -12,6 +12,10 @@ import java.util.Properties;
 /**
  * Created by ninggd on 2017/11/17.
  */
+
+/**
+ * mysql 的 server 服务类
+ */
 public final class MyServerSql {
 
     /**
@@ -19,17 +23,22 @@ public final class MyServerSql {
      */
     private final static Logger LOG = LoggerFactory.getLogger(MyServerSql.class);
 
-
-
+    /**
+     * 初始化 Java properties 的配置文件
+     */
     protected final static Properties myServerSQL = new Properties();
 
-
+    /**
+     * 静态代码块：初始化代码时，只执行一次
+     */
     static {
+        //加载配置文件
         URL resource = PropertyUtil.getClasspathResource("jise-server-sql.xml");
-
+        // 获取输入流
         FileInputStream in = null;
         try {
             in = new FileInputStream(new File(resource.toURI()));
+            // properties 读取输入流
             myServerSQL.loadFromXML(in);
         } catch (Exception e) {
             throw new RuntimeException(e);
