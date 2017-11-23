@@ -19,9 +19,15 @@ import java.util.List;
  */
 public class SparkRDD implements Serializable {
 
+    /**
+     * 输入文本路径
+     */
     public static String path = null;
     public static JavaSparkContext sparkContext;
 
+    /**
+     * 初始化 spark 相关操作
+     */
     static {
         path = "sparkrdd/src/main/resources/spark.txt";
         SparkConf conf = new SparkConf();
@@ -99,7 +105,7 @@ public class SparkRDD implements Serializable {
         System.out.println(javaRDD.partitions().size());
         //对JavaRDD进行重分区
         System.out.println(javaRDD.coalesce(1).partitions().size());
-        //对JavaRDD 进行重分区(),如果重分区的数目大于原来的分区数，那么必须指定shuffle参数为true，否则，分区数不便.
+        //对JavaRDD 进行重分区(),如果重分区的数目大于原来的分区数，那么必须指定shuffle参数为true，否则，分区数不变.
         System.out.println(javaRDD.coalesce(4).partitions().size());
         // 对JavaRDD进行重分区
         System.out.println(javaRDD.coalesce(4,true).partitions().size());
@@ -109,15 +115,47 @@ public class SparkRDD implements Serializable {
      *  测试 spark 的repartition操作：
      *  该函数其实就是coalesce函数第二个参数为true的实现
      */
-    public void sparkRepartition(){
+    public void testRepartition() {
         JavaRDD<String> javaRDD = sparkContext.textFile(path);
         System.out.println(javaRDD.partitions().size());
         System.out.println(javaRDD.repartition(4).partitions().size());
     }
 
+    /**
+     * 测试 spark 的 randomSplit 操作：
+     * 该函数根据weights权重，将一个RDD切分成多个RDD.该权重参数为一个Double数组
+     */
+    public void testRandomSplit() {
+        // 初始化 list
+        List<Integer> data = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        // 利用spark parallelize 转换成 RDD
+        JavaRDD<Integer> javaRDD = sparkContext.parallelize(data);
+        System.out.println(javaRDD.partitions().size());
+        // 初始化分配权重
+        double[] weights = {1.0, 2.0, 3.0, 4.0};
+        JavaRDD<Integer>[] javaRDDS = javaRDD.randomSplit(weights);
+        System.out.println(javaRDDS.length);
+        System.out.println(javaRDDS[0].collect());
+        System.out.println(javaRDDS[1].collect());
+        System.out.println(javaRDDS[2].collect());
+        System.out.println(javaRDDS[3].collect());
+    }
+
+    /**
+     * 测试 spark 的 glom 操作
+     * 该函数是将RDD中每一个分区中类型为T的元素转换成Array[T],这样每一个分区就只有一个数组元素。
+     */
+    public void testGlom() {
+        List<Integer> data = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        JavaRDD<Integer> javaRDD = sparkContext.parallelize(data,3);
+        System.out.println(javaRDD.partitions().size());
+        List<List<Integer>> lists = javaRDD.glom().collect();
+        System.out.println(lists);
+    }
+
     public static void main(String[] args) {
         SparkRDD sparkRDD = new SparkRDD();
-        sparkRDD.sparkRepartition();
+        sparkRDD.testGlom();
     }
 
 }
