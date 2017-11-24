@@ -2,11 +2,14 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.FlatMapFunction;
+import org.apache.spark.api.java.function.FlatMapFunction2;
 import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.Function2;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -123,7 +126,8 @@ public class SparkRDD implements Serializable {
 
     /**
      * 测试 spark 的 randomSplit 操作：
-     * 该函数根据weights权重，将一个RDD切分成多个RDD.该权重参数为一个Double数组
+     * def randomSplit(weights: Array[Double], seed: Long = Utils.random.nextLong): Array[RDD[T]]
+     * 该函数根据weights权重，将一个RDD切分成多个RDD.该权重参数为一个Double数组,第二个参数为random的种子，基本可忽略。
      */
     public void testRandomSplit() {
         // 初始化 list
@@ -153,9 +157,162 @@ public class SparkRDD implements Serializable {
         System.out.println(lists);
     }
 
+    /**
+     * def union(other: RDD[T]): RDD[T]
+     * 该函数比较简单，就是将两个RDD进行合并，不去重。
+     */
+    public void testUnion(){
+        List<Integer> data = Arrays.asList(1, 2, 3, 4, 5);
+        JavaRDD<Integer> javaRDD1 = sparkContext.parallelize(data);
+        List<Integer> data2 = Arrays.asList(6, 7, 8, 9, 10);
+        JavaRDD<Integer> javaRDD2 = sparkContext.parallelize(data2);
+        System.out.println(javaRDD1.collect());
+        System.out.println(javaRDD2.collect());
+        System.out.println(javaRDD1.union(javaRDD2).collect());
+    }
+
+    /**
+     * def intersection(other: RDD[T]): RDD[T]
+     *def intersection(other: RDD[T], numPartitions: Int): RDD[T]
+     *def intersection(other: RDD[T], partitioner: Partitioner)(implicit ord: Ordering[T] = null): RDD[T]
+     * 该函数返回两个RDD的交集，并且去重。参数numPartitions指定返回的RDD的分区数。参数partitioner用于指定分区函数
+     */
+    public void testIntersection(){
+        List<Integer> data = Arrays.asList(1, 2, 3, 4, 5);
+        JavaRDD<Integer> javaRDD1 = sparkContext.parallelize(data);
+        List<Integer> data2 = Arrays.asList(3, 4, 5, 5, 6);
+        JavaRDD<Integer> javaRDD2 = sparkContext.parallelize(data2);
+        JavaRDD<Integer> javaRDD3 = javaRDD1.intersection(javaRDD2);
+        System.out.println(javaRDD3.collect());
+    }
+
+    /**
+     * def subtract(other: RDD[T]): RDD[T]
+     * def subtract(other: RDD[T], numPartitions: Int): RDD[T]
+     * def subtract(other: RDD[T], partitioner: Partitioner)(implicit ord: Ordering[T] = null): RDD[T]
+     * 该函数类似于intersection，但返回在RDD中出现，并且不在otherRDD中出现的元素，不去重。参数含义同intersection
+     */
+    public void testSubtract(){
+        List<Integer> data = Arrays.asList(1, 2, 3, 4, 5);
+        JavaRDD<Integer> javaRDD1 = sparkContext.parallelize(data);
+        List<Integer> data2 = Arrays.asList(3, 4, 5, 5, 6);
+        JavaRDD<Integer> javaRDD2 = sparkContext.parallelize(data2);
+        System.out.println(javaRDD1.subtract(javaRDD2).collect());
+    }
+
+    /**
+     * def mapPartitions[U](f: (Iterator[T]) => Iterator[U], preservesPartitioning: Boolean = false)(implicit arg0: ClassTag[U]): RDD[U]
+     * 该函数和map函数类似，只不过映射函数的参数由RDD中的每一个元素变成了RDD中每一个分区的迭代器。
+     * 如果在映射的过程中需要频繁创建额外的对象，使用mapPartitions要比map高效的过。
+     * 比如，将RDD中的所有数据通过JDBC连接写入数据库，如果使用map函数，可能要为每一个元素都创建一个connection，
+     * 这样开销很大，如果使用mapPartitions，那么只需要针对每一个分区建立一个connection。
+     * 参数preservesPartitioning表示是否保留父RDD的partitioner分区信息。
+     */
+    public void testMapPartitions(){
+        List<Integer> data = Arrays.asList(1, 2, 3, 4, 5);
+        JavaRDD<Integer> javaRDD1 = sparkContext.parallelize(data);
+        JavaRDD<Integer> integerJavaRDD = javaRDD1.mapPartitions(new FlatMapFunction<Iterator<Integer>, Integer>() {
+            @Override
+            public Iterator<Integer> call(Iterator<Integer> integerIterator) throws Exception {
+                LinkedList<Integer> lists = new LinkedList<Integer>();
+                while (integerIterator.hasNext()) {
+                    lists.add(integerIterator.next());
+                }
+                return lists.iterator();
+            }
+        });
+        System.out.println(integerJavaRDD.collect());
+    }
+
+    /**
+     * def mapPartitionsWithIndex[U](f: (Int, Iterator[T]) => Iterator[U], preservesPartitioning: Boolean = false)(implicit arg0: ClassTag[U]): RDD[U]
+     * 函数作用同mapPartitions，不过提供了两个参数，第一个参数为分区的索引。
+     */
+    public void testMapPartitionsWithIndex(){
+        List<Integer> data = Arrays.asList(1, 2, 3, 4, 5);
+        JavaRDD<Integer> javaRDD1 = sparkContext.parallelize(data,3);
+        JavaRDD<String> res = javaRDD1.mapPartitionsWithIndex(new Function2<Integer, Iterator<Integer>, Iterator<String>>() {
+            @Override
+            public Iterator<String> call(Integer integer, Iterator<Integer> integerIterator) throws Exception {
+                LinkedList<String> list = new LinkedList<String>();
+                while (integerIterator.hasNext()) {
+                    list.add(Integer.toString(integer) + "|" + integerIterator.next());
+                }
+                return list.iterator();
+            }
+        }, false);
+        System.out.println(res.collect());
+    }
+
+    /**
+     * def zip[U](other: RDD[U])(implicit arg0: ClassTag[U]): RDD[(T, U)]
+     * zip函数用于将两个RDD组合成Key/Value形式的RDD,这里默认两个RDD的partition数量以及元素数量都相同，否则会抛出异常。
+     */
+    public void testZip(){
+        List<Integer> list1 = Arrays.asList(1, 2, 3, 4, 5);
+        JavaRDD<Integer> javaRDD1 = sparkContext.parallelize(list1);
+
+        List<String> list2 = Arrays.asList("a", "b", "c", "d", "e");
+        JavaRDD<String> javaRDD2 = sparkContext.parallelize(list2);
+
+        System.out.println(javaRDD1.zip(javaRDD2).collect());
+    }
+
+    /**
+     * zipPartitions函数将多个RDD按照partition组合成为新的RDD，该函数需要组合的RDD具有相同的分区数，但对于每个分区内的元素数量没有要求。
+     * 该函数有好几种实现，可分为三类：
+     * 参数是一个RDD
+     * def zipPartitions[B, V](rdd2: RDD[B])(f: (Iterator[T], Iterator[B]) => Iterator[V])(implicit arg0: ClassTag[B], arg1: ClassTag[V]): RDD[V]
+     * def zipPartitions[B, V](rdd2: RDD[B], preservesPartitioning: Boolean)(f: (Iterator[T], Iterator[B]) => Iterator[V])(implicit arg0: ClassTag[B], arg1: ClassTag[V]): RDD[V]
+     * 这两个区别就是参数preservesPartitioning，是否保留父RDD的partitioner分区信息
+     */
+    public void testZipPartitions(){
+        final List<Integer> list1 = Arrays.asList(1, 2, 3, 4, 5);
+        JavaRDD<Integer> javaRDD1 = sparkContext.parallelize(list1);
+
+        List<String> list2 = Arrays.asList("a", "b", "c", "d", "e");
+        JavaRDD<String> javaRDD2 = sparkContext.parallelize(list2);
+
+        JavaRDD<String> res1 = javaRDD1.mapPartitionsWithIndex(new Function2<Integer, Iterator<Integer>, Iterator<String>>() {
+            @Override
+            public Iterator<String> call(Integer integer, Iterator<Integer> integerIterator) throws Exception {
+                LinkedList<String> list = new LinkedList<String>();
+                while (integerIterator.hasNext()) {
+                    list.add(Integer.toString(integer) + "|" + integerIterator.next());
+                }
+                return list.iterator();
+            }
+        }, false);
+        System.out.println(res1.collect());
+
+        JavaRDD<String> res2 = javaRDD2.mapPartitionsWithIndex(new Function2<Integer, Iterator<String>, Iterator<String>>() {
+            @Override
+            public Iterator<String> call(Integer integer, Iterator<String> iterator) throws Exception {
+                LinkedList<String> list = new LinkedList<String>();
+                while (iterator.hasNext()) {
+                    list.add(Integer.toString(integer) + "|" + iterator.next());
+                }
+                return list.iterator();
+            }
+        }, false);
+        System.out.println(res2.collect());
+
+        JavaRDD<String> rdd = javaRDD1.zipPartitions(javaRDD2, new FlatMapFunction2<Iterator<Integer>, Iterator<String>, String>() {
+            @Override
+            public Iterator<String> call(Iterator<Integer> iterator, Iterator<String> iterator2) throws Exception {
+                LinkedList<String> lists = new LinkedList<String>();
+                while (iterator.hasNext() && iterator2.hasNext()) {
+                    lists.add(iterator.next() + "_" + iterator2.next());
+                }
+                return lists.iterator();
+            }
+        });
+        System.out.println(rdd.collect());
+    }
+
     public static void main(String[] args) {
         SparkRDD sparkRDD = new SparkRDD();
-        sparkRDD.testGlom();
+        sparkRDD.testZipPartitions();
     }
 
 }
