@@ -26,6 +26,6 @@ public class SyncProducerActiveMQTest {
 
     @Test
     public void producerTest(){
-        pService.sendMessage(receiveQueue, "my name is chhliu!");
+        pService.sendMessage(receiveQueue, "我的名字!");
     }
 }
