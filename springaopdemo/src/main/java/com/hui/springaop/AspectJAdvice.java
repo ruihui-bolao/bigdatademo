@@ -17,7 +17,7 @@ import org.aspectj.lang.annotation.*;
 public class AspectJAdvice {
 
     /**
-     * Pointcut
+     * 指定 spring aop 切点，与函数 aspectJMethod 对应
      * 定义Pointcut，Pointcut名称为aspectjMethod,必须无参，无返回值
      * 只是一个标识，并不进行调用
      */
@@ -25,6 +25,10 @@ public class AspectJAdvice {
     private void aspectJMethod() {
     }
 
+    /**
+     * 执行切点前做的一些工作
+     * @param joinPoint
+     */
     @Before("aspectJMethod()")
     public void doBefore(JoinPoint joinPoint) {
         System.out.println("----dobefore()开始----");
@@ -33,6 +37,12 @@ public class AspectJAdvice {
         System.out.println("----dobefore()结束----");
     }
 
+    /**
+     * @around 增强处理近似等于Before 和 AfterReturning 的总和。@around 可以改变执行目标方法的参数值，也可以执行目标方法之后的返回值。
+     * @param pjp
+     * @return
+     * @throws Throwable
+     */
     @Around("aspectJMethod()")
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable{
 
@@ -45,6 +55,10 @@ public class AspectJAdvice {
         return retval;
     }
 
+    /**
+     * 制定切点后做的一些工作
+     * @param joinPoint
+     */
     @After(value = "aspectJMethod()")
     public void doAfter(JoinPoint joinPoint) {
         System.out.println("----doAfter()开始----");
@@ -53,6 +67,11 @@ public class AspectJAdvice {
         System.out.println("----doAfter()结束----");
     }
 
+    /**
+     * 对返回值进行处理。
+     * @param joinPoint
+     * @param retval
+     */
     @AfterReturning(value = "aspectJMethod()", returning = "retval")
     public void doReturn(JoinPoint joinPoint, String retval) {
         System.out.println("AfterReturning()开始");
@@ -62,6 +81,11 @@ public class AspectJAdvice {
 
     }
 
+    /**
+     * 对抛出的异常进行处理
+     * @param joinPoint
+     * @param e
+     */
     @AfterThrowing(value = "aspectJMethod()", throwing = "e")
     public void doThrowing(JoinPoint joinPoint, Exception e) {
         System.out.println("-----doThrowing()开始-----");
