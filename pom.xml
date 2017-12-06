@@ -25,6 +25,8 @@
         <module>javamysql</module>
         <module>sparksqludf</module>
         <module>sparkrdd</module>
+        <module>java-netty</module>
+        <module>DES</module>
     </modules>
 
     <properties>
