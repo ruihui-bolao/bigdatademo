@@ -17,8 +17,8 @@ import java.io.IOException;
  */
 public class Runnable2 implements Runnable {
 
-    public String path = "C:\\Users\\sssd\\Desktop\\destest\\t2.txt";
-    public String savaPath = "C:\\Users\\sssd\\Desktop\\destest";
+    public String path = "DES\\src\\main\\resources\\destest\\init\\t2.txt";
+    public String savaPath = "DES\\src\\main\\resources\\destest";
 
     @Override
     public void run() {

@@ -16,8 +16,8 @@ import java.io.InputStream;
 public class FileHandle {
 
     public static void main(String[] args) throws Exception {
-        String path = "C:\\Users\\sssd\\Desktop\\destest\\jiami";
-        String savePath = "C:\\Users\\sssd\\Desktop\\destest\\jiemi";
+        String path = "DES\\src\\main\\resources\\destest\\jiami";
+        String savePath = "DES\\src\\main\\resources\\destest\\jiemi";
         File file = new File(path);
         File[] files = file.listFiles();
         for (File file1 : files) {

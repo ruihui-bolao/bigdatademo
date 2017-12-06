@@ -10,8 +10,8 @@ package multhread;
  */
 public class Runnable7 implements Runnable {
 
-    public String path = "C:\\Users\\sssd\\Desktop\\destest\\t7.txt";
-    public String savaPath = "C:\\Users\\sssd\\Desktop\\destest";
+    public String path = "DES\\src\\main\\resources\\destest\\init\\t7.txt";
+    public String savaPath = "DES\\src\\main\\resources\\destest";
 
     @Override
     public void run() {
