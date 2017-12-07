@@ -1,5 +1,6 @@
 package multhread;
 
+import org.joda.time.DateTime;
 import util.DESCBC;
 
 import java.io.File;
@@ -28,6 +29,7 @@ public class FileHandle {
             byte[] encrypt = DESCBC.encrypt(bytes);
             outputStream = new FileOutputStream(savaPath + "\\" + "jiami" + "\\" + file.getName());
             outputStream.write(encrypt);
+            System.out.println("保存文件成功" + DateTime.now());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
