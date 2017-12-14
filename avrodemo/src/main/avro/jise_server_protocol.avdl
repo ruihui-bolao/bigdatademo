@@ -1,0 +1,198 @@
+@namespace("com.sdyc.jise.server.protocol")
+/**
+ Hello
+ */
+protocol JiseServerProtocol {
+
+    /**
+    传输的抓取 Task 消息, 序列化结果
+    */
+    record FetchTask {
+        /**
+        Task ID
+        */
+        string taskId;
+
+        /**
+        Server Message
+        */
+        string message;
+
+        /**
+        下载 task 是否成功
+        */
+        boolean success;
+
+        /**
+        Task Parameter
+        */
+        union{map<string>, null} params;
+    }
+
+    /**
+    传输的抓取结果 Task 消息, 序列化结果
+    */
+    record FetchResponse {
+        /**
+        Task ID
+        */
+        string taskId;
+
+        /**
+        Server Message
+        */
+        union{string, null} exrror;
+
+        /**
+        是否抓取成功, 状态码
+        */
+        int statusCode;
+        /**
+        抓取数量
+        */
+        int fetchCount;
+    }
+
+
+    /**
+    传输的抓取结果 Task 消息, 序列化结果
+    */
+    record AppComponent {
+        /**
+        App ID
+        */
+        string appId;
+
+        /**
+        App Version
+        */
+        string version;
+
+        /**
+        是否有更新
+        */
+        boolean updateStatus;
+
+        /**
+        App Jar Bytes
+        */
+        union{bytes, null} payload;
+    }
+
+
+
+    /**
+    验证码
+    */
+    record RandomCode {
+        /**
+        验证码 ID
+        */
+        string nCaptchaId;
+
+        /**
+        验证码
+        */
+        string codeString;
+    }
+
+
+    /**
+    模板语言
+    */
+    record JiseTemplate {
+        /**
+        URL 所属的 Host
+        */
+        string host;
+
+
+        /*
+        符合的规则，表达式
+        */
+        string matchHost;
+
+
+        /*
+        类别标识
+        */
+        union{string, null} category;
+
+
+        /*
+        附加信息
+        */
+        union{map<string>, null} meta;
+
+
+        /**
+        模板正文
+        */
+        string template;
+    }
+
+
+    /**
+      Herbeat
+     */
+    int register(string clientToken, string clientIp, int clientType);
+
+
+    /**
+      Herbeat
+     */
+    int heartbeat(string clientToken);
+
+
+    /**
+      获取单个抓取 Task, clientType java or python
+     */
+    FetchTask getTask(string clientToken, string clientType, union{map<string>, null} params);
+
+
+    /**
+     反馈 Cookie 状态
+    */
+    void reportCookie(int cookieId, int status);
+
+
+    /**
+     向服务器反馈该 Task 的抓取状态
+     */
+    int fetchResult(FetchResponse response);
+
+    /**
+     更新 App 组件
+     */
+    AppComponent updateApp(string appId, string version, string clientType);
+
+
+    /*
+    验证码识别，放到 Server 端，统一管理
+    */
+    RandomCode getRandomCode(string clientToken, int ncodeType, bytes imageBytes);
+
+
+    /**
+     验证码 状态
+    */
+    void reportRandomCode(string nCaptchaId, boolean status);
+
+
+    /**
+       域名变更
+    */
+    void domainChange(string oldDomain, string newChange);
+
+
+    /*
+    根据 host 查询可使用的模板
+    */
+    union{JiseTemplate, null} getJiseTemplate(string taskUrn,string category, string url, union{string, null} host);
+
+
+    /*
+    根据 URL 获得该 URL 的抓取时间，该接口用于检验该 URL 是否抓取过，如果无须抓取，则返回正常时间，如果需抓取返回 0
+    */
+    long getFetchTime(string url);
+}

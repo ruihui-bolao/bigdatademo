@@ -1,6 +1,6 @@
 {"namespace": "com.sdyc.avro.demo",
  "type": "record",
- "name": "User",
+ "name": "UserMe",
  "fields": [
      {"name": "name", "type": "string"},
      {"name": "favorite_number",  "type": ["int", "null"]},

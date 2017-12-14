@@ -31,7 +31,7 @@ public class WriteAvro {
                 .setFavoriteNumber(null)
                 .build();
 
-        String path = "G:\\tmp\\user.avro"; // avro文件存放目录
+        String path = "E:\\Work\\bigdatademo\\avrodemo\\src\\main\\avro\\user.avsc"; // avro文件存放目录
         SpecificDatumWriter<User> userDatumWriter = new SpecificDatumWriter<User>(User.class);
         DataFileWriter<User> dataFileWriter = new DataFileWriter<User>(userDatumWriter);
         dataFileWriter.create(user1.getSchema(), new File(path));

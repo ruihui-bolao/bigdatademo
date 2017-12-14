@@ -1,4 +1,4 @@
-package com.hui.springaop;
+package com.hui.springaop.runcode;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -18,8 +18,8 @@ public class App {
         BeanFactory factory = new ClassPathXmlApplicationContext("applicationContext.xml");
         TextManager textManager = (TextManager) factory.getBean("customerManager");
         TextManager textManager2 = (TextManager) factory.getBean("customerManager2");
-        textManager.showText("C:\\Users\\sssd\\Desktop\\spark.txt");
-        textManager2.showText("C:\\Users\\sssd\\Desktop\\spark.txt");
+        textManager.showText("E:\\Work\\bigdatademo\\sparkrdd\\src\\main\\resources\\spark.txt");
+        textManager2.showText("E:\\Work\\bigdatademo\\sparkrdd\\src\\main\\resources\\spark1.txt");
     }
 
 }
