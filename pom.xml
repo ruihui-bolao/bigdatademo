@@ -27,6 +27,7 @@
         <module>sparkrdd</module>
         <module>java-netty</module>
         <module>DES</module>
+        <module>esconnect</module>
     </modules>
 
     <properties>
