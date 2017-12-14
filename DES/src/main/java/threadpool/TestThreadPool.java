@@ -18,10 +18,9 @@ import java.util.concurrent.TimeUnit;
 public class TestThreadPool {
 
     public static void main(String[] args) {
-
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(100);
         for (int i = 0;i<100; i++){
             Runnable1 runnable1 = new Runnable1();
-            ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(100);
             scheduledExecutorService.scheduleAtFixedRate(runnable1,0,3, TimeUnit.SECONDS);
         }
     }
