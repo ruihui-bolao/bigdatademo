@@ -18,7 +18,7 @@ import java.io.File;
 public class ReadAvro {
     public static void main(String[] args) throws Exception{
         SpecificDatumReader<User> userDatumReader = new SpecificDatumReader<User>(User.class);
-        DataFileReader<User> dataFileReader = new DataFileReader<User>(new File("G:\\tmp\\user.avro"), userDatumReader);
+        DataFileReader<User> dataFileReader = new DataFileReader<User>(new File("E:\\Work\\bigdatademo\\avrodemo\\src\\main\\avro\\user.avsc"), userDatumReader);
         User user = null;
         while (dataFileReader.hasNext()) {
             user = dataFileReader.next();

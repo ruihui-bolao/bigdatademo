@@ -23,7 +23,7 @@ public class SparkDemo {
         SparkConf conf = new SparkConf();
         conf.setMaster("local").setAppName("JavaWordCount");
         JavaSparkContext sparkContext = new JavaSparkContext(conf);
-        JavaRDD<String> javaRDD = sparkContext.textFile("file:///C:/Users/sssd/Desktop/spark.txt");
+        JavaRDD<String> javaRDD = sparkContext.textFile("file:///E:/Work/bigdatademo/sparkwork/src/main/resources/files/spark.txt");
         Map<String, Integer> wordCountMap = javaRDD.mapToPair(new PairFunction<String, String, Integer>() {
             @Override
             public Tuple2<String, Integer> call(String s) throws Exception {
@@ -36,7 +36,7 @@ public class SparkDemo {
             }
         }).collectAsMap();
         for (Map.Entry<String, Integer> entry : wordCountMap.entrySet()) {
-            System.out.println("统计结果为：" + entry.getKey() + entry.getValue());
+            System.out.println("统计结果为：" + entry.getKey() + "---" + entry.getValue());
         }
     }
 }
