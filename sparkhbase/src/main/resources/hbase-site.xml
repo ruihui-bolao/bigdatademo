@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+/**
+ * Copyright 2010 The Apache Software Foundation
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership. The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<configuration>
+
+    <property>
+        <name>hbase.rootdir</name>
+        <value>hdfs://new1data/hbase</value>
+    </property>
+
+    <!-- 开启分布式模式 -->
+    <property>
+        <name>hbase.cluster.distributed</name>
+        <value>true</value>
+    </property>
+
+    <!-- 这里是对的，只配置端口，为了配置多个HMaster -->
+    <property>
+        <name>hbase.master.port</name>
+        <value>60000</value>
+    </property>
+
+
+    <property>
+        <name>hbase.master.info.port</name>
+        <value>60010</value>
+    </property>
+
+    <property>
+        <name>hbase.regionserver.info.port</name>
+        <value>60030</value>
+    </property>
+
+    <property>
+        <name>hbase.tmp.dir</name>
+        <value>/opt/software/hbase/tmp</value>
+    </property>
+
+    <!-- Hbase的外置zk集群时，使用下面的zk端口 -->
+    <property>
+        <name>hbase.zookeeper.quorum</name>
+        <value>nowledgedata-n238:2181,nowledgedata-n239:2181,nowledgedata-n240:2181</value>
+    </property>
+
+    <!--运行hbase的用户有写入文件权限的目录作为zookeeper数据目录 -->
+    <property>
+        <name>hbase.zookeeper.property.dataDir</name>
+        <value>/opt/software/zookeeper/data</value>
+    </property>
+    <property>
+        <name>hbase.coprocessor.region.classes</name>
+        <value>com.sdyc.data720.hbase.coprocessor.Data720HBaseCoprocessor</value>
+    </property>
+
+
+
+</configuration>

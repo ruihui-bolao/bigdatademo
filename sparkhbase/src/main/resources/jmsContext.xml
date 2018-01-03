@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- jms 连接工厂 -->
+    <bean id="activeMQJmsFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL">
+            <value>tcp://192.168.1.116:61616</value>
+        </property>
+        <property name="useAsyncSend" value="true"/>
+        <property name="alwaysSyncSend" value="false"/>
+    </bean>
+
+    <!-- Spring用于管理真正的ConnectionFactory的ConnectionFactory -->
+    <bean id="connectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+        <!-- 目标ConnectionFactory对应真实的可以产生JMS Connection的ConnectionFactory -->
+        <property name="targetConnectionFactory" ref="activeMQJmsFactory"/>
+        <property name="sessionCacheSize" value="8" />
+    </bean>
+
+    <bean id="ndmpEtl" class="org.apache.activemq.command.ActiveMQQueue"
+          autowire="constructor">
+        <constructor-arg value="ndmpEtl"/>
+    </bean>
+
+    <!-- jms 模板 -->
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="defaultDestination" ref="ndmpEtl"/>
+        <property name="messageConverter">
+            <bean class="org.springframework.jms.support.converter.SimpleMessageConverter" />
+        </property>
+
+        <property name="explicitQosEnabled" value="true" /> <!-- deliveryMode, priority, timeToLive 的开关，要生效，必须配置为true，默认false-->
+        <property name="deliveryMode" value="2" /> <!-- 发送模式  DeliveryMode.NON_PERSISTENT=1:非持久 ; DeliveryMode.PERSISTENT=2:持久-->
+
+        <property name="sessionTransacted" value="false"/>
+        <property name="sessionAcknowledgeModeName" value="CLIENT_ACKNOWLEDGE"/>
+
+        <property name="receiveTimeout" value="5000"/>
+    </bean>
+</beans>

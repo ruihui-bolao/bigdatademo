@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	       http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/util
+           http://www.springframework.org/schema/util/spring-util.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <import resource="applicationContext.xml"/>
+
+    <util:map id="commonJobParam" key-type="java.lang.String"
+              value-type="java.lang.Object">
+        <entry key="conf" value-ref="hadoopConfiguration"/>
+        <entry key="fileSystem" value-ref="fileSystem"/>
+        <entry key="DBDataService" value-ref="DBDataService"/>
+        <entry key="hiveTypeRepository" value-ref="hiveTypeMappingRepository" />
+        <entry key="batchDetailService" value-ref="etlBatchDetailServiceImpl" />
+        <entry key="hiveDbName" value="meiya"/>
+        <entry key="esNodes" value="${es.nodes}"/>
+        <entry key="jmsTemplate" value-ref="jmsTemplate"/>
+    </util:map>
+
+
+    <!--Task &ndash -->
+    <!--核心的线程池 -->
+    <bean id="taskScheduler" scope="singleton" init-method="initialize"
+          destroy-method="destroy"
+          class="org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler">
+        <property name="daemon">
+            <value type="boolean">false</value>
+        </property>
+        <property name="poolSize">
+            <value type="int">10</value>
+        </property>
+        <property name="threadNamePrefix" value="lego-task-thread"/>
+    </bean>
+
+    <!-- 以下在服务器端启动时需要 -->
+    <!--Spark Context Configuration -->
+    <bean id="sparkContext" class="com.sdyc.ndmp.schedule.spark.SparkContextManager">
+        <constructor-arg name="param">
+            <util:properties location="classpath:spark.properties"/>
+        </constructor-arg>
+        <property name="idelMinuteShutdown" value="120" />
+    </bean>
+
+    <bean id="jobStatusListener"
+          class="com.sdyc.ndmp.lego.listener.JobStatusListener">
+        <constructor-arg name="legoJobService" ref="legoJobService"/>
+        <constructor-arg name="legoJobHistoryService" ref="legoJobHistoryService"/>
+    </bean>
+
+     <util:map id="jobListenerMap" key-type="java.lang.String"
+              value-type="com.sdyc.ndmp.schedule.job.JobListener">
+        <entry key="jobStatusListener" value-ref="jobStatusListener"/>
+    </util:map>
+
+    <bean id="legoThreadPoolScheduler" class="com.sdyc.ndmp.lego.task.LegoThreadPoolScheduler">
+        <property name="taskScheduler" ref="taskScheduler"/>
+        <property name="legoJobService" ref="legoJobService"/>
+        <property name="delay" value="1000" />
+        <property name="legoJobStarter">
+            <bean class="com.sdyc.ndmp.lego.task.LegoJobStarter">
+                <property name="legoJobService" ref="legoJobService"/>
+                <property name="legoJobScheduleService" ref="legoJobScheduleService"/>
+                <property name="category" value="MEIYA_PROCESS" />
+            </bean>
+        </property>
+    </bean>
+    <bean id="jobBundleLuancher" class="com.sdyc.ndmp.lego.osgi.JobBundleLuancher">
+        <constructor-arg name="osgiParam">
+            <util:map key-type="java.lang.String"
+                      value-type="java.lang.String">
+                <entry key="console" value=""/>
+                <entry key="org.osgi.framework.bundle.parent" value="framework"/>
+                <entry key="org.osgi.framework.bootdelegation"
+                       value="sun.*,com.sun.*,javax.*,net.sf.*,org.bson.*,io.*,org.apache.*,org.springframework.*,akka.*,scala.*,com.alibaba.*,com.google.*,com.sdyc.etl.kernel.*,com.sdyc.ndmp.lego.*,com.sdyc.ndmp.protobuf.*,com.sdyc.ndmp.schedule.*,com.sdyc.etl.loader.*"/>
+            </util:map>
+        </constructor-arg>
+        <property name="legoJobService" ref="legoJobService"/>
+        <property name="legoJobScheduleService" ref="legoJobScheduleService"/>
+        <property name="jobModifyListener">
+            <util:set value-type="com.sdyc.ndmp.schedule.job.JobModifyListener">
+                <bean class="com.sdyc.ndmp.schedule.spark.SparkContextManager.SparkJobModifyListener"/>
+            </util:set>
+        </property>
+    </bean>
+
+    <bean id="bundlrSocketServer" class="com.sdyc.ndmp.lego.protocol.LegoBundlrSocketServer">
+        <constructor-arg name="iface" value="com.sdyc.ndmp.lego.protocol.LegoBundleProtocol"/>
+        <constructor-arg name="impl" ref="jobBundleLuancher"/>
+        <property name="port" value="${lego.port}"/>
+    </bean>
+
+    <bean id="DBDataService" class="com.sdyc.ndmp.copyright.platform.service.DBDataServiceImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+        <property name="redisTemplate" ref="redisTemplate"/>
+    </bean>
+</beans>
