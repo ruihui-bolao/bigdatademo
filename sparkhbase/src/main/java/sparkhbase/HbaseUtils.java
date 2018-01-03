@@ -22,15 +22,15 @@ import java.util.Set;
  * Date: 2017/12/21 8:56
  * Version: V1.0
  * To change this template use File | Settings | File Templates.
- * Description:     Spark hbase 的工具类 （ spark rdd 写入数据到 hbase ）
+ * Description:     Spark hbase 的工具类 （ 主要为 spark rdd 写入数据到 hbase ）
  */
 public class HbaseUtils {
 
     /**
      * hbase conf 配置文件 写入到 spark conf
      *
-     * @param conf
-     * @param tableName
+     * @param conf      未初始化 hbase conf 的配置文件
+     * @param tableName hbase 表名
      * @return
      */
     public static Configuration buildWriteHbaseConf(Configuration conf, String tableName) {
@@ -40,7 +40,7 @@ public class HbaseUtils {
     }
 
     /**
-     * spark rdd 写入数据到 hbase
+     * spark rdd 写入数据到 hbase（通过 saveAsNewAPIHadoopDataset 将数据保存到 hbase 中）
      *
      * @param javaRDD  源数据 javardd
      * @param conf     spark conf 配置文件
@@ -49,10 +49,12 @@ public class HbaseUtils {
      */
     public static void sparkWriteToHbase(JavaRDD<String> javaRDD, Configuration conf, final String datatype) throws Exception {
 
+
         Job job = new Job(conf);
-        job.setOutputKeyClass(NullWritable.class);
-        job.setOutputValueClass(Put.class);
-        job.setOutputFormatClass(TableOutputFormat.class);
+        job.setOutputKeyClass(NullWritable.class);        // 设置输出时的 key 值类型
+        job.setOutputValueClass(Put.class);               // 设置输出时的 value 值类,hbase中数据的插入和取出都使用的是 Put 类对象
+        job.setOutputFormatClass(TableOutputFormat.class);   // mapreduce 的输出导入到hbase 有多种方式可以实现，TableOutputFormat 就是其中的一种，但是其效率并不好，
+        // 大量数据转载到hbase 的话最好是生成Hfile 后再导入到hbase ,hfile 是 hbase 内部存储表示形式，所以效率速度很快。
         javaRDD.mapPartitionsToPair(new PairFlatMapFunction<Iterator<String>, NullWritable, Put>() {
             @Override
             public Iterable<Tuple2<NullWritable, Put>> call(Iterator<String> iterator) throws Exception {
