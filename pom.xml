@@ -29,6 +29,7 @@
         <module>DES</module>
         <module>esconnect</module>
         <module>sparkhbase</module>
+        <module>esjavademo</module>
     </modules>
 
     <properties>
