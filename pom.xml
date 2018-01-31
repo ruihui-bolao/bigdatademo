@@ -30,6 +30,7 @@
         <module>esconnect</module>
         <module>sparkhbase</module>
         <module>esjavademo</module>
+        <module>utils</module>
     </modules>
 
     <properties>
