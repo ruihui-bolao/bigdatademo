@@ -6,12 +6,12 @@ import java.io.*;
  * Date: 2018/1/29 10:25
  * Version: V1.0
  * To change this template use File | Settings | File Templates.
- * Description:
+ * Description:   关于文件相关处理的工具类
  */
 public class FileUtils {
 
     /**
-     * 递归合并制定目录下的文件
+     * 递归合并指定目录下的文件内容
      *
      * @param inputPath 输入文件路径
      * @return 关于文件内容的  Stringbuffer
@@ -80,6 +80,6 @@ public class FileUtils {
         String savaPath = "C:\\Users\\sssd\\Desktop\\huitemp\\a.json";
         StringBuffer stringBuffer = FileUtils.combineFile(inputPath);
         System.out.println(stringBuffer.toString());
-        FileUtils.savaFile(stringBuffer,savaPath);
+        FileUtils.savaFile(stringBuffer, savaPath);
     }
 }
