@@ -1,0 +1,128 @@
+<configuration>
+<property>
+	<name>javax.jdo.option.ConnectionURL</name>
+	<value>jdbc:mysql://192.168.1.8:2849/copyrighthive?createDatabaseIfNotExist=true&amp;characterEncoding=utf8&amp;useSSL=true</value>
+</property>
+<property>
+	<name>javax.jdo.option.ConnectionDriverName</name>
+	<value>com.mysql.jdbc.Driver</value>
+</property>
+<property>
+	<name>javax.jdo.option.ConnectionUserName</name>
+	<value>ndmp</value>
+</property>
+<property>
+	<name>javax.jdo.option.ConnectionPassword</name>
+	<value>123456</value>
+</property>
+
+
+  <property>
+    <name>hive.aux.jars.path</name>
+    <value>file:///opt/software/hive/lib/hbase-client-1.2.2.jar,file:///opt/software/hive/lib/hbase-common-1.2.2.jar,file:///opt/software/hive/lib/hive-hbase-handler-2.1.1.jar</value>
+    <description>The location of the plugin jars that contain implementations of user defined functions and serdes.</description>
+  </property>
+ 
+ <property>
+        <name>hive.exec.mode.local.auto</name>
+        <value>false</value>
+        <description> Let Hive determine whether to run in local mode automatically </description>
+    </property>
+
+    <property>
+	<name>hive.metastore.warehouse.dir</name>
+	<value>/user/hive/warehouse</value>
+    </property>
+
+    <property>
+          <name>hive.metastore.local</name>
+          <value>false</value>
+          <description>controls whether to connect to remove metastore server or open a new metastore server in Hive Client JVM</description>
+    </property>
+        
+    <property>
+        <name>hive.metastore.uris</name>
+        <value>thrift://192.168.1.238:9083</value>
+        <description>Thrift URI for the remote metastore. Used by metastore client to connect to remote metastore.</description>
+    </property>
+    
+    <property>
+        <name>hive.server2.thrift.min.worker.threads</name>
+        <value>2</value>
+        <description>Minimum number of Thrift worker threads</description>
+    </property>
+
+    <property>
+        <name>hive.server2.thrift.max.worker.threads</name>
+        <value>10</value>
+        <description>Maximum number of Thrift worker threads</description>
+    </property>
+
+    <property>
+        <name>hive.server2.thrift.port</name>
+        <value>10000</value>
+        <description>Port number of HiveServer2 Thrift interface. Can be overridden by setting $HIVE_SERVER2_THRIFT_PORT</description>
+    </property>
+
+    <property>
+        <name>hive.server2.thrift.bind.host</name>
+        <value>0.0.0.0</value>
+        <description>Bind host on which to run the HiveServer2 Thrift interface.Can be overridden by setting$HIVE_SERVER2_THRIFT_BIND_HOST</description>
+    </property>
+    
+    <property>  
+          <name>hive.insert.into.multilevel.dirs</name>  
+          <value>true</value>  
+    </property>
+
+    <property>
+           <name>hive.metastore.authorization.storage.checks</name>
+           <value>false</value>
+    </property>
+
+    <property>
+          <name>hive.server2.authentication</name>
+          <value>NONE</value>
+    </property>
+
+    <property>
+        <name>hive.execution.engine</name>
+        <value>mr</value>
+    </property>
+
+    <property>
+        <name>tez.lib.uris</name>
+        <value>${fs.defaultFS}/lib/tez/tez-0.7.1.tar.gz</value>
+    </property>
+
+    <property>
+          <name>hive.security.authorization.enabled</name>
+          <value>false</value>
+          <description>enable or disable the Hive client authorization</description>
+    </property>
+
+    <property>  
+          <name>hive.files.umask.value</name>  
+          <value>0002</value>  
+          <description>The dfs.umask value for the hive created folders</description>  
+    </property>
+
+    <property>
+          <name>hive.metastore.schema.verification</name>
+          <value>false</value>
+    </property>
+    <property>
+          <name>hive.cli.print.header</name>
+          <value>true</value>
+    </property>
+    <property>
+          <name>hive.cli.print.current.db</name>
+          <value>true</value>
+    </property>
+    <property>  
+    <name>datanucleus.schema.autoCreateAll</name>  
+    <value>true</value>  
+    <description>creates necessary schema on a startup if one doesn't exist. set this to false, after creating it once</description>  
+ </property>
+
+</configuration>

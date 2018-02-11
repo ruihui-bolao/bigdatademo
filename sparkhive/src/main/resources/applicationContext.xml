@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:hdp="http://www.springframework.org/schema/hadoop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	       http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/hadoop
+           http://www.springframework.org/schema/hadoop/spring-hadoop.xsd">
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:hive.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="hiveDriver" class="org.apache.hive.jdbc.HiveDriver"/>
+    <bean id="hiveDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <constructor-arg name="driver" ref="hiveDriver"/>
+        <constructor-arg name="url" value="${hive.url}"/>
+    </bean>
+    <hdp:hive-client-factory id="hiveClientFactory" hive-data-source-ref="hiveDataSource"/>
+
+    <hdp:hive-template id="hiveTemplate" hive-client-factory-ref="hiveClientFactory"/>
+
+
+</beans>

@@ -31,6 +31,7 @@
         <module>sparkhbase</module>
         <module>esjavademo</module>
         <module>utils</module>
+        <module>sparkhive</module>
     </modules>
 
     <properties>
@@ -43,6 +44,7 @@
         <spring.data.hadoop.version>2.4.0.RELEASE</spring.data.hadoop.version>
         <aspectj.version>1.6.11</aspectj.version>
         <spark.version>1.6.1</spark.version>
+        <hadoop.version>2.6.5</hadoop.version>
     </properties>
 
     <dependencies>
@@ -112,12 +114,49 @@
 
         <dependency>
             <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-commons</artifactId>
-            <version>1.8.4.RELEASE</version>
+            <artifactId>spring-data-hadoop</artifactId>
+            <version>${spring.data.hadoop.version}</version>
+            <optional>true</optional>
             <exclusions>
                 <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>jcl-over-slf4j</artifactId>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-streaming</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-tools</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-data-hadoop-batch</artifactId>
+                    <groupId>org.springframework.data</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>hadoop-mapreduce-client-jobclient</artifactId>
+                    <groupId>org.apache.hadoop</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>hadoop-mapreduce-client-core</artifactId>
+                    <groupId>org.apache.hadoop</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-data-hadoop-core</artifactId>
+                    <groupId>org.springframework.data</groupId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.data</groupId>
+                    <artifactId>spring-data-hadoop-hbase</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.data</groupId>
+                    <artifactId>spring-data-hadoop-batch</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.data</groupId>
+                    <artifactId>spring-data-hadoop-pig</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-data-hadoop-hive</artifactId>
+                    <groupId>org.springframework.data</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
