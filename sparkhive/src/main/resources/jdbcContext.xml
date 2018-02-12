@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	       http://www.springframework.org/schema/beans/spring-beans.xsd
+	       http://www.springframework.org/schema/context
+	       http://www.springframework.org/schema/context/spring-context.xsd
+	       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+    <!-- dmp数据库DataSource and JdbcTemplate -->
+    <!--dmp JDBC 数据源-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driverClass}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="filters">
+            <value>stat</value>
+        </property>
+        <property name="maxActive">
+            <value>20</value>
+        </property>
+        <property name="initialSize">
+            <value>3</value>
+        </property>
+        <property name="maxWait">
+            <value>60000</value>
+        </property>
+        <property name="minIdle">
+            <value>1</value>
+        </property>
+        <property name="timeBetweenEvictionRunsMillis">
+            <value>60000</value>
+        </property>
+        <property name="minEvictableIdleTimeMillis">
+            <value>300000</value>
+        </property>
+        <property name="validationQuery">
+            <value>SELECT 'x'</value>
+        </property>
+        <property name="testWhileIdle">
+            <value>true</value>
+        </property>
+        <property name="testOnBorrow">
+            <value>false</value>
+        </property>
+        <property name="testOnReturn">
+            <value>false</value>
+        </property>
+        <property name="poolPreparedStatements">
+            <value>true</value>
+        </property>
+        <property name="maxOpenPreparedStatements">
+            <value>20</value>
+        </property>
+    </bean>
+
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" >
+        <constructor-arg index="0" ref="dataSource" />
+    </bean>
+
+
+    <context:component-scan base-package="com.hui.hive"/>
+
+</beans>

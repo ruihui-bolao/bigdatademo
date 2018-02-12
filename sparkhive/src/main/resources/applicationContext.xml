@@ -12,9 +12,12 @@
         <property name="locations">
             <list>
                 <value>classpath:hive.properties</value>
+                <value>classpath:jdbc.properties</value>
             </list>
         </property>
     </bean>
+
+    <import resource="jdbcContext.xml"/>
 
     <bean id="hiveDriver" class="org.apache.hive.jdbc.HiveDriver"/>
     <bean id="hiveDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
