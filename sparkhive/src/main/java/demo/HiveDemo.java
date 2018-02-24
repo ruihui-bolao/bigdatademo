@@ -1,12 +1,8 @@
-package hive.jdbc.demo;
+package demo;
 
-import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.hive.HiveContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.hadoop.hive.HiveTemplate;
+
 import java.util.List;
 
 /**
@@ -27,7 +23,7 @@ public class HiveDemo {
         System.out.println(result);
         List<String> dataRes = hiveTemplate.query("show databases");
         System.out.println(dataRes);
-        List<String> results = hiveTemplate.query("select * from etl.hq2aomenwb");
+        List<String> results = hiveTemplate.query("select * from copyright.wq_app_data");
         for (String s : results) {
             System.out.println(s);
         }

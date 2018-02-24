@@ -18,15 +18,7 @@
     </bean>
 
     <import resource="jdbcContext.xml"/>
-
-    <bean id="hiveDriver" class="org.apache.hive.jdbc.HiveDriver"/>
-    <bean id="hiveDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
-        <constructor-arg name="driver" ref="hiveDriver"/>
-        <constructor-arg name="url" value="${hive.url}"/>
-    </bean>
-    <hdp:hive-client-factory id="hiveClientFactory" hive-data-source-ref="hiveDataSource"/>
-
-    <hdp:hive-template id="hiveTemplate" hive-client-factory-ref="hiveClientFactory"/>
+    <import resource="hive-context.xml"/>
 
 
 </beans>

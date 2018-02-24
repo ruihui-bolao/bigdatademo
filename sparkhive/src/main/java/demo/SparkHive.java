@@ -1,4 +1,4 @@
-package hive.spark.demo;
+package demo;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
@@ -23,8 +23,8 @@ public class SparkHive {
         conf.setMaster("local").setAppName("SparkHive");
         JavaSparkContext javaSparkContext = new JavaSparkContext(conf);
         HiveContext hiveContext = new HiveContext(javaSparkContext.sc());
-        hiveContext.sql("use etl");
-        JavaRDD<Row> show_databases = hiveContext.sql("select * from hq2aomenfood").toJavaRDD();
+        hiveContext.sql("use copyright");
+        JavaRDD<Row> show_databases = hiveContext.sql("select * from wq_app_data").toJavaRDD();
         List<Row> rows = show_databases.collect();
         System.out.println("数据库的大小为：" + rows.size());
         for (Row row : rows) {
