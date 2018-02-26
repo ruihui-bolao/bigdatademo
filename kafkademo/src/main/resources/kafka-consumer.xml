@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+	       http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+	       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <context:component-scan base-package="com.hui.springkafka" />
+
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:kafkaConsumer.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id = "kafkaConsumerProperites" class="java.util.HashMap">
+        <constructor-arg>
+            <map>
+                <entry key="bootstrap.servers" value="${bootstrap.servers}"/>
+                <entry key="group.id" value="${group.id}"/>
+                <entry key="enable.auto.commit" value="${enable.auto.commit}"/>
+                <entry key="auto.commit.interval.ms" value="${auto.commit.interval.ms}"/>
+                <entry key="session.timeout.ms" value="${session.timeout.ms}"/>
+                <entry key="key.deserializer" value="${key.deserializer}" />
+                <entry key="value.deserializer" value="${value.deserializer}" />
+            </map>
+        </constructor-arg>
+
+    </bean>
+
+    <bean id="kafkaConsumerFactory" class="org.springframework.kafka.core.DefaultKafkaConsumerFactory">
+        <constructor-arg ref="kafkaConsumerProperites"/>
+    </bean>
+
+    <bean id="consumerContainerProperties" class="org.springframework.kafka.listener.config.ContainerProperties">
+        <constructor-arg value="${kafka.topic}"/>
+        <property name="messageListener" ref="kafkaConsumerListener" />
+    </bean>
+
+    <bean id="conusmerContainer" class="org.springframework.kafka.listener.KafkaMessageListenerContainer">
+        <constructor-arg ref="kafkaConsumerFactory"/>
+        <constructor-arg ref="consumerContainerProperties"/>
+    </bean>
+
+</beans>
