@@ -24,7 +24,7 @@ import java.util.List;
  * Date: 2018/2/11 12:01
  * Version: V1.0
  * To change this template use File | Settings | File Templates.
- * Description:   实现将 hdfs 上的文件加载到 hive 中。
+ * Description:   hiveUtils工具类，实现hive 数据读取和写入
  */
 public class HiveUtils implements Serializable {
 
