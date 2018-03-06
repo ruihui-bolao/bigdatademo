@@ -10,12 +10,12 @@ import org.springframework.kafka.core.KafkaTemplate;
  * Date: 2018/2/26 16:32
  * Version: V1.0
  * To change this template use File | Settings | File Templates.
- * Description:
+ * Description:   spring + kafka 生产者
  */
 public class SpringProducerMain {
 
     public static void main(String[] args) {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:spring-producer.xml");
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:kafka-producer.xml");
         KafkaTemplate kafkaTemplate = ctx.getBean("kafkaTemplate", KafkaTemplate.class);
         for (int i = 1; i < 5; i++) {
             String msg = "msg-" + i;

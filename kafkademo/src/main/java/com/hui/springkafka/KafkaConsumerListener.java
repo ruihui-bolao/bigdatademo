@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * Date: 2018/2/26 16:38
  * Version: V1.0
  * To change this template use File | Settings | File Templates.
- * Description:
+ * Description:   Spring + kafka 消费监听
  */
 
 @Component("kafkaConsumerListener")
