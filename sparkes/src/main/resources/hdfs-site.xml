@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+	<property>
+	    <name>dfs.nanemnode.name.dir</name>
+	    <value>/opt/software/hadoop/name</value>
+	</property>
+	<property>
+	    <name>dfs.data.dir</name>
+	    <value>/opt/software/hadoop/data</value>
+	</property>
+	<property>
+	    <name>dfs.replication</name>
+	    <value>2</value>
+	</property>
+	<property>
+	    <name>dfs.nameservices</name>
+	    <value>new1data</value>
+	</property>
+	<property>
+	    <name>dfs.ha.namenodes.new1data</name>
+	    <value>nowledgedata-n238,nowledgedata-n239</value>
+	</property>
+
+	<property>
+	    <name>dfs.namenode.rpc-address.new1data.nowledgedata-n238</name>
+	    <value>nowledgedata-n238:9000</value>
+	</property>
+	<property>
+	    <name>dfs.namenode.http-address.new1data.nowledgedata-n238</name>
+	    <value>nowledgedata-n238:50070</value>
+	</property>
+
+	<property>
+	    <name>dfs.namenode.rpc-address.new1data.nowledgedata-n239</name>
+	    <value>nowledgedata-n239:9000</value>
+	</property>
+	<property>
+	    <name>dfs.namenode.http-address.new1data.nowledgedata-n239</name>
+	    <value>nowledgedata-n239:50070</value>
+	</property>
+
+	<property>
+	    <name>dfs.namenode.shared.edits.dir</name>
+	    <value>qjournal://nowledgedata-n238:8485;nowledgedata-n239:8485;nowledgedata-n240:8485/new1data</value>
+	</property>
+        <property>
+	    <name>dfs.ha.automatic-failover.enabled</name>
+	    <value>true</value>
+	</property>
+	<property>
+	    <name>dfs.client.failover.proxy.provider.new1data</name>
+	    <value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
+	</property>
+
+	<property>
+	    <name>dfs.journalnode.edits.dir</name>
+	    <value>/opt/software/hadoop/journal</value>
+	</property>
+	<property>
+	    <name>dfs.ha.fencing.methods</name>
+	    <value>sshfence</value>
+	</property>
+	<property>
+	    <name>dfs.ha.fencing.ssh.private-key-files</name>
+	    <value>/home/hadoop/.ssh/id_rsa</value>
+	</property>
+</configuration>
