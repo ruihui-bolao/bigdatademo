@@ -31,6 +31,8 @@
         <module>esjavademo</module>
         <module>utils</module>
         <module>sparkhive</module>
+        <module>algorithms</module>
+        <module>sparkes</module>
     </modules>
 
     <properties>
