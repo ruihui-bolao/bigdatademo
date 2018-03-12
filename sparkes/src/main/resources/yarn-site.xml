@@ -15,143 +15,103 @@
 <configuration>
 
 <!-- Site specific YARN configuration properties -->
+
     <property>
         <name>yarn.nodemanager.aux-services</name>
         <value>mapreduce_shuffle</value>
-        <description>shuffle service that needs to be set for Map Reduce to run </description>
+        <description>shuffle service that needs to be set for Map Reduce to run</description>
     </property>
 
     <property>
         <name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
         <value>org.apache.hadoop.mapred.ShuffleHandler</value>
-        <description>新框架中 NodeManager 与 RM 通信的接口class</description>
     </property>
-    
+
     <property>
         <name>yarn.resourcemanager.webapp.address</name>
-        <value>${yarn.resourcemanager.hostname}:8088</value>
-        <description>新框架中各个 task 的资源调度及运行状况通过通过该 web 界面访问</description>
+        <value>EagleOS-210:8088</value>
     </property>
 
     <property>
         <name>yarn.resourcemanager.hostname</name>
-        <value>nowledgedata-n238</value>
-    </property>
-
-    <property>
-        <description>
-            CLASSPATH for YARN applications. A comma-separated list
-            of CLASSPATH entries. When this value is empty, the following default
-            CLASSPATH for YARN applications would be used.
-            For Linux:
-            $HADOOP_CONF_DIR,
-            $HADOOP_COMMON_HOME/share/hadoop/common/*,
-            $HADOOP_COMMON_HOME/share/hadoop/common/lib/*,
-            $HADOOP_HDFS_HOME/share/hadoop/hdfs/*,
-            $HADOOP_HDFS_HOME/share/hadoop/hdfs/lib/*,
-            $HADOOP_YARN_HOME/share/hadoop/yarn/*,
-            $HADOOP_YARN_HOME/share/hadoop/yarn/lib/*
-            For Windows:
-            %HADOOP_CONF_DIR%,
-            %HADOOP_COMMON_HOME%/share/hadoop/common/*,
-            %HADOOP_COMMON_HOME%/share/hadoop/common/lib/*,
-            %HADOOP_HDFS_HOME%/share/hadoop/hdfs/*,
-            %HADOOP_HDFS_HOME%/share/hadoop/hdfs/lib/*,
-            %HADOOP_YARN_HOME%/share/hadoop/yarn/*,
-            %HADOOP_YARN_HOME%/share/hadoop/yarn/lib/*
-        </description>
-        <name>yarn.application.classpath</name>
-        <value>
-            $HADOOP_HOME/share/hadoop/common/*,
-            $HADOOP_HOME/share/hadoop/common/lib/*
-        </value>
-    </property>
-
-    <property>
-        <name>yarn.resourcemanager.scheduler.address</name>
-        <value>nowledgedata-n238:8030</value>
+        <value>EagleOS-210</value>
     </property>
 
     <property>
         <name>yarn.resourcemanager.resource-tracker.address</name>
-        <value>${yarn.resourcemanager.hostname}:8031</value>
-    </property> 
-
-    <property>
-        <description>The address of the applications manager interface in the RM.</description>
-        <name>yarn.resourcemanager.address</name>
-        <value>nowledgedata-n238:8032</value>
-    </property>
-
-    <!-- conf timeline server -->
-    <property>
-        <name>yarn.timeline-service.enabled</name>
-        <value>true</value>
-    </property>
-
-    <property>
-        <name>yarn.timeline-service.hostname</name>
-        <value>nowledgedata-n239</value>
-    </property>
-
-    <property>
-        <name>yarn.timeline-service.http-cross-origin.enabled</name>
-        <value>true</value>
-    </property>
-
-    <property>
-        <name>yarn.resourcemanager.system-metrics-publisher.enabled</name>
-        <value>true</value>
+        <value>EagleOS-210:8031</value>
     </property>
 
     <property>
         <name>yarn.nodemanager.resource.memory-mb</name>
         <value>10240</value>
-        <description>
-            Hadoop YARN可以使用的最大内存量，用来控制每个Node上能运行MapReduce的数量。默认8GB
-        </description>
-    </property>
-
-    <property>
-        <name>yarn.nodemanager.resource.cpu-vcores</name>
-        <value>32</value>
-        <description>
-            Hadoop 2.x以上提供内存和CPU两种资源技术方式，该参数控制Node上的CPU数量。默认是8
-        </description>
     </property>
 
     <property>
         <name>yarn.scheduler.minimum-allocation-mb</name>
-        <value>256</value>
+        <value>1024</value>
     </property>
 
     <property>
         <name>yarn.scheduler.maximum-allocation-mb</name>
-        <value>8192</value>
+        <value>5020</value>
     </property>
 
     <property>
-        <name>yarn.scheduler.minimum-allocation-vcores</name>
-        <value>1</value>
+        <name>yarn.app.mapreduce.am.resource.mb</name>
+        <value>4096</value>
     </property>
 
+    <property>
+        <name>yarn.app.mapreduce.am.command-opts</name>
+        <value>-Xmx3276m</value>
+    </property>
+
+    <property>
+        <name>yarn.nodemanager.vmem-pmem-ratio</name>
+        <value>5</value>
+    </property>
+
+    <property>
+        <name>yarn.nodemanager.resource.cpu-vcores</name>
+        <value>4</value>
+    </property>
+    
     <property>
         <name>yarn.scheduler.maximum-allocation-vcores</name>
-        <value>32</value>
-    </property>
-
-    <!--
-    <property>
-        <name>yarn.resourcemanager.scheduler.address</name>
-        <value></value>
-        <description>同上，NodeManger 需要知道 RM 主机的 scheduler 调度服务接口地址</description>
+        <value>6</value>
     </property>
 
     <property>
-        <name>yarn.resourcemanager.resourcetracker.address</name>
-        <value></value>
-        <description>新框架中 NodeManager 需要向 RM 报告任务运行状态供 Resouce 跟踪，因此 NodeManager 节点主机需要知道 RM 主机的 tracker 接口地址</description>
+        <name>yarn.log.server.url</name>
+        <value>http://EagleOS-210:19888/jobhistory/logs/</value>
     </property>
-    -->
+
+    <property>
+        <name>yarn.log-aggregation-enable</name>
+        <value>true</value>
+    </property>
+
+    <property>
+        <name>yarn.timeline-service.enabled</name>
+        <value>true</value>
+    </property>
+    
+    <property>
+        <description>The hostname of the Timeline service web application.</description>
+        <name>yarn.timeline-service.hostname</name>
+        <value>EagleOS-210</value>
+    </property>
+    
+    <property>
+        <name>yarn.timeline-service.http-cross-origin.enabled</name>
+        <value>true</value>
+    </property>
+    
+    <property>
+        <description>Publish YARN information to Timeline Server</description>
+        <name>yarn.resourcemanager.system-metrics-publisher.enabled</name>
+        <value>true</value>
+    </property>
 
 </configuration>

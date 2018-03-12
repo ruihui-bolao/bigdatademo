@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 <!--
-  Licensed under the Apache License, Version 2.0 (the "License");
+       Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
 
@@ -17,28 +17,30 @@
 <!-- Put site-specific property overrides in this file. -->
 
 <configuration>
-	<property>
-	    <name>fs.defaultFS</name>
-	    <value>hdfs://new1data</value>
-	</property>
-
-	<property>
-	    <name>ha.zookeeper.quorum</name>
-	    <value>nowledgedata-n238:2181,nowledgedata-n239:2181,nowledgedata-n240:2181</value>
-	</property>
-
-	<property>
-		<name>system:user.name</name>
-		<value>hadoop</value>
-	</property>
-
+    
     <property>
-        <name>data720.kafka.topic.channel</name>
-        <value>data720</value>
+        <name>fs.defaultFS</name>
+        <value>hdfs://eagleos</value>
+    </property>
+    <property>
+        <name>hadoop.tmp.dir</name>
+        <value>/opt/software/hadoop/tmp</value>
+    </property>
+    <property>
+        <name>dfs.ha.fencing.methods</name>
+        <value>sshfence</value>
+    </property>
+    <property>
+        <name>dfs.ha.fencing.ssh.private-key-files</name>
+        <value>/home/hadoop/.ssh/id_rsa</value>
+    </property>
+    <property>
+        <name>ha.zookeeper.quorum</name>
+        <value>EagleOS-208:2181,EagleOS-209:2181,EagleOS-210:2181</value>
+    </property>
+    <property>
+        <name>io.native.lib.available</name>
+        <value>true</value>
     </property>
 
-	<property>
-		<name>metadata.broker.list</name>
-		<value>192.168.1.238:9092,192.168.1.239:9092,192.168.1.240:9092</value>
-	</property>
 </configuration>

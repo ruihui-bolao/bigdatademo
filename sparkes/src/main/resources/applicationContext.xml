@@ -33,7 +33,7 @@
     <!--Spark Context Configuration -->
     <bean id="sparkContext" class="com.sdyc.ndmp.schedule.spark.SparkContextManager">
         <constructor-arg name="param">
-            <util:properties location="classpath:spark.properties"/>
+            <util:properties location="classpath:spark.properties.back"/>
         </constructor-arg>
         <property name="idelMinuteShutdown" value="120" />
     </bean>

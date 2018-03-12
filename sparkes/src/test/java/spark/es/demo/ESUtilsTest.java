@@ -8,6 +8,7 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -19,10 +20,10 @@ public class ESUtilsTest {
     public static String dataType;
 
     static {
-        esIndexs = "wzx_app/app";
-        esNodes = "192.168.1.235,192.168.1.238,192.168.1.237";
-        taskType = 6;
-        dataType = "WQ_APP";
+        esIndexs = "wzx_caricature/caricature";
+        esNodes = "10.20.57.208,10.20.57.209,10.20.57.210,10.20.57.211";
+        taskType = 4;
+        dataType = "WQ_CARICATURE";
     }
 
     public static void main(String[] args) {
@@ -45,11 +46,13 @@ public class ESUtilsTest {
         final HashMap<String, String> keyWords = new HashMap<String, String>(3);
         keyWords.put(ESUtils.AND_KEYS, "");
         // 加入抓取的关键字
-        keyWords.put(ESUtils.OR_KEYS, "前夫大人请滚开");
+        keyWords.put(ESUtils.OR_KEYS, "妙手天医在都市");
         keyWords.put(ESUtils.NOT_KEYS, "");
-        JavaRDD<JSONObject> javaRDD = ESUtils.queryDataFromEs(conf, sparkContext, keyWords, null, null, esIndexs, esNodes, taskType, false, null);
-        long count = javaRDD.count();
-        System.out.println(count);
+        final List<JSONObject> collect = ESUtils.queryDataFromEs(conf, sparkContext, keyWords, null, null, esIndexs, esNodes, taskType, false, null).collect();
+        System.out.println("查询到的数据大小为：" + collect.size());
+        for (JSONObject jsonObject : collect) {
+            System.out.println(jsonObject);
+        }
     }
 
 }
