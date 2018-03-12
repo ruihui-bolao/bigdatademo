@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
  * Date: 2018/3/12 13:40
  * Version: V1.0
  * To change this template use File | Settings | File Templates.
- * Description:
+ * Description:   线程池启动多线程事例
  */
 public class ExecutorServiceTest {
 

@@ -30,9 +30,12 @@ public class HandlerProducer implements Runnable{
      *  实现 runable 接口
      */
     public void run() {
+        // 初始化 KafkaProducerSingleton 单例
         KafkaProducerSingleton kafkaProducerSingleton = KafkaProducerSingleton.getInstance();
+        // 初始化 topic 和 retry
         kafkaProducerSingleton.init("accesslog",3);
         System.out.println("当前线程：" + Thread.currentThread().getName() + ",获取的kafka实例" + kafkaProducerSingleton);
+        // kafak producer 发送消息
         kafkaProducerSingleton.sendKafkaMessage("发送消息：" + message);
     }
 

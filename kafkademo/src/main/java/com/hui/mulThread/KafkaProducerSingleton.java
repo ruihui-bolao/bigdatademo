@@ -70,19 +70,22 @@ public class KafkaProducerSingleton {
     /**
      * kafka 生产者进行初始化
      *
-     * @param topic
-     * @param retry
+     * @param topic  kafka topic
+     * @param retry  发送不成功尝试次数
      */
     public void init(String topic, int retry) {
-
+        // kafka topic
         this.topic = topic;
+        // 发送消息失败后，尝试的次数
         this.retry = retry;
         if (null == kafkaProducer){
+            // 加载配置文件
             Properties props = new Properties();
             InputStream inputStream = null;
             try {
                 inputStream = this.getClass().getClassLoader().getResourceAsStream("kafkaProducer.properties");
                 props.load(inputStream);
+                // 初始化 kafka producer
                 kafkaProducer = new KafkaProducer<String, String>(props);
             } catch (IOException e) {
                 System.out.println("初始化失败：" + e);
