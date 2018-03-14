@@ -33,13 +33,13 @@ public class BaiLuYuan {
      * @return
      */
     public HashMap<String,String> extractTime(String path){
-        String path = "C:\\Users\\sssd\\Desktop\\bailuyuan\\test1.xlsx";
         try {
             XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(new File(path)));
             XSSFSheet sheet = workbook.getSheetAt(0);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
 
