@@ -54,7 +54,6 @@ public class CodeUtils {
             }
             unicodeBytes = unicodeBytes + hexB;
         }
-        System.out.println("unicodeBytes is: " + unicodeBytes);
         return unicodeBytes;
     }
 

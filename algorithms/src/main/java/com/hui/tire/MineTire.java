@@ -19,13 +19,7 @@ public class MineTire {
      */
     private static Node root;
 
-    /**
-     *  字符串 list 添加
-     */
-    public static List charList;
-
     static {
-        charList = Arrays.asList("1","2","3","4","5","6","7","8","9","a","b","c","d","e","f");
         // 初始化 tire root node.
         root = new Node();
     }
@@ -48,7 +42,7 @@ public class MineTire {
         int length = chars.length;
         for (int i = 0; i < chars.length; i++) {
             // 获取字符串对应的下标索引。
-            int index = charList.indexOf(String.valueOf(chars[i]));
+            int index = Integer.parseInt(String.valueOf(chars[i]),16);
             if (root.childs[index] != null){
                 root.childs[index].prefixNum++;
             }else {
@@ -94,9 +88,14 @@ public class MineTire {
             }
             for (int i = 0; i < root.childs.length; i++) {
                 if (root.childs[i] != null) {
-                    String s = (String) charList.get(i);
+//                    String s = (String) charList.get(i);
+                    String s = Integer.valueOf(i).toHexString(i);
                     String tempStr = prefixs + s;
+                    long startTime = System.currentTimeMillis();
                     map.putAll(preTraversal(root.childs[i],tempStr));
+                    long endTime = System.currentTimeMillis();
+
+                    System.out.println();
                 }
             }
         }
@@ -121,7 +120,7 @@ public class MineTire {
     private boolean search(Node root, String word){
         char[] chars = CodeUtils.gbEncoding(word).toCharArray();
         for (int i = 0; i < chars.length; i++) {
-            int index = charList.indexOf(String.valueOf(chars[i]));
+            int index = Integer.parseInt(String.valueOf(chars[i]),16);
             if (root.childs[index] == null){
                 // 如果不存在，则说明查找失败
                 return false;
@@ -144,7 +143,7 @@ public class MineTire {
     private HashMap<String, Integer> getWordsForPrefix(Node root, String prefix){
         char[] chars = prefix.toLowerCase().toCharArray();
         for (int i = 0; i < chars.length; i++) {
-            int index = charList.indexOf(String.valueOf(chars[i]));
+            int index = Integer.parseInt(String.valueOf(chars[i]),16);
             if (root.childs[index] == null){
                 return null;
             }

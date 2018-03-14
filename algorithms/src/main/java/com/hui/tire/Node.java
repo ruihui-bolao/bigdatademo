@@ -39,7 +39,7 @@ public class Node {
         prefixNum = 0;
         isWord = false;
         isWordGroup = false;
-        childs = new Node[15];
+        childs = new Node[16];
     }
 
     public int getDumpliNum() {

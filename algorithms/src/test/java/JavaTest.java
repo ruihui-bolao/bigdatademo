@@ -41,4 +41,29 @@ public class JavaTest {
         System.out.println(dataStr.trim());
     }
 
+    @Test
+    public void test4(){
+        String str = "中国";
+        char[] chars = str.toCharArray();
+        System.out.println(chars.length);
+        for (char aChar : chars) {
+            System.out.println(aChar);
+        }
+    }
+
+    /**
+     *  测试转换数组
+     */
+    @Test
+    public void test5(){
+/*        String str = "f";
+        Integer x = Integer.parseInt(str,16);
+        System.out.println(x);*/
+        int i = 10;
+        String s = Integer.valueOf(i).toHexString(i);
+        System.out.println(s);
+    }
+
+
+
 }
