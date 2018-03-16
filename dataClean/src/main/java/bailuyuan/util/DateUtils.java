@@ -1,4 +1,4 @@
-package sdyc.bailuyuan.util;
+package bailuyuan.util;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;

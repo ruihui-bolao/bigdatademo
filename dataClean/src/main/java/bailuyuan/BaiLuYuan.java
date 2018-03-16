@@ -1,13 +1,13 @@
-package sdyc.bailuyuan;
+package bailuyuan;
 
+import bailuyuan.util.DateUtils;
+import bailuyuan.util.HttpUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import sdyc.bailuyuan.util.DateUtils;
-import sdyc.bailuyuan.util.HttpUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,7 +44,9 @@ public class BaiLuYuan {
             String macLabel = "";
             String timeLabel = "";
             int lastRowNum = sheet.getLastRowNum();
+            int i = 1;
             for (Row row : sheet) {
+                System.out.println(++i);
                 int rowNum = row.getRowNum();
                 if (rowNum == 0) {
                     continue;
@@ -146,7 +148,9 @@ public class BaiLuYuan {
             ArrayList<ArrayList<String>> resList = BaiLuYuan.readFromExcel(sourcePath);
             HashMap<String, String> resMap = BaiLuYuan.extractTime(sourcePath);
             File dataFile = new File(dataPath);
+            int i = 0;
             for (ArrayList<String> list : resList) {
+                System.out.printf("开始处理第%d条数据",++i);
                 String phoneMac = list.get(0);
                 String timeStr = resMap.get(phoneMac);
                 String[] split = timeStr.split(",");
@@ -161,7 +165,7 @@ public class BaiLuYuan {
                     String time2 = DateUtils.stampToDateStr(split1[1]);
                     String allTime = time1 + "," + time2;
                     String resStr = list.get(1) + allTime + "\n";
-                    FileUtils.writeStringToFile(dataFile, resStr, "UTF-8", true);
+                    FileUtils.writeStringToFile(dataFile, resStr, "gbk", true);
                 }
             }
             return true;
@@ -172,24 +176,24 @@ public class BaiLuYuan {
     }
 
     /**
-     *  用来比较两短时间相差几天
+     * 用来比较两短时间相差几天
      *
      * @param startTime
      * @param endTime
      * @return
      */
-    public static Long compareDate(String startTime , String endTime) throws Exception{
+    public static Long compareDate(String startTime, String endTime) throws Exception {
         Date old = new Date();
         Date news = new Date();
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        old=sdf.parse(startTime);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        old = sdf.parse(startTime);
         news = sdf.parse(endTime);
         Calendar cal = Calendar.getInstance();
         cal.setTime(old);
         long time1 = cal.getTimeInMillis();
         cal.setTime(news);
         long time2 = cal.getTimeInMillis();
-        long betweenDays=(time2-time1)/(1000*3600*24);
+        long betweenDays = (time2 - time1) / (1000 * 3600 * 24);
         return betweenDays;
     }
 
@@ -202,7 +206,7 @@ public class BaiLuYuan {
      */
     public static boolean removal(String saveTempPath, String uniquePath) {
         try {
-            List<String> lines = FileUtils.readLines(new File(saveTempPath), "UTF-8");
+            List<String> lines = FileUtils.readLines(new File(saveTempPath), "gbk");
             HashSet<String> set = new HashSet<String>();
             HashMap<String, Long> mapCount = new HashMap<String, Long>();
             for (String line : lines) {
@@ -221,7 +225,7 @@ public class BaiLuYuan {
                 String endTime = split[4];
                 Long date = compareDate(startTime, endTime);
 
-                if (mapCount.get(phoneMac) != null &&  mapCount.get(phoneMac) > 2 &&  date < 5) {
+                if (mapCount.get(phoneMac) != null && mapCount.get(phoneMac) > 2 && date < 7) {
                     set.add(phoneMac);
                 }
             }
@@ -246,46 +250,44 @@ public class BaiLuYuan {
     public static void main(String[] args) throws Exception {
 
         // 从 excel 中读取数据 并临时保存
-        String sourcePath = "C:\\Users\\sssd\\Desktop\\bailuyuan\\白鹿原数据导出.xlsx";
-        String saveTempPath = "C:\\Users\\sssd\\Desktop\\bailuyuan\\temp.txt";
+        String sourcePath = "C:\\Users\\sssd\\Desktop\\bailuyuan\\bailuyuan_3.xlsx";
+        String saveTempPath = "C:\\Users\\sssd\\Desktop\\bailuyuan\\temp_3.csv";
         String uniquePath = "C:\\Users\\sssd\\Desktop\\bailuyuan\\uniqueTemp.txt";
 
 /*        // 合并文件
         Boolean aBoolean = BaiLuYuan.handleFile(sourcePath, saveTempPath);
-        System.out.println(aBoolean);*/
+        System.out.println(aBoolean);
 
-/*        // 临时文件去重
-
+        // 临时文件去重
         boolean removal = removal(saveTempPath, uniquePath);
         System.out.println(removal);*/
 
 
-            File resFile = new File("C:\\Users\\sssd\\Desktop\\bailuyuan\\res.csv");
-            if (true) {
-            //获取本次访问权限认证(accessToken)的url
-            CloseableHttpClient client = HttpUtils.getHttpClient();
-            final String tdtoken = "https://api.talkingdata.com/tdmkaccount/authen/app/v2?";
-            final String X_Access_Token = TDCall.getXAccessToken(client, tdtoken);
-            final TDCall tdCall = new TDCall(X_Access_Token);
-            List<String> lines = FileUtils.readLines(new File(uniquePath), "UTF-8");
-            for (String line : lines) {
-                List<String> lineList = Arrays.asList(line.split(","));
-                String phoneMac = lineList.get(2);
-                //  TD 接口调用
-                final String join = tdCall.parserData(client, phoneMac);
-                if (StringUtils.isNotBlank(join)) {
-                    final String res = line + "," + join + "\n";
-                    //解析完成后写出的结果文件csv
-                    FileUtils.writeStringToFile(resFile, res, true);
-                } else {
-                    final String res = line + "," + ",,,,,," + "\n";
-                    //解析完成后写出的结果文件csv
-                    FileUtils.writeStringToFile(resFile, res, true);
-                }
-                System.out.println(line);
+        // 调用Td接口
+        File resFile = new File("C:\\Users\\sssd\\Desktop\\bailuyuan\\res.csv");
+        //获取本次访问权限认证(accessToken)的url
+        CloseableHttpClient client = HttpUtils.getHttpClient();
+        final String tdtoken = "https://api.talkingdata.com/tdmkaccount/authen/app/v2?";
+        final String X_Access_Token = TDCall.getXAccessToken(client, tdtoken);
+        final TDCall tdCall = new TDCall(X_Access_Token);
+        List<String> lines = FileUtils.readLines(new File(uniquePath), "UTF-8");
+        int i = 1;
+        for (String line : lines) {
+            System.out.printf("开始第%d条数据%n",i++);
+            List<String> lineList = Arrays.asList(line.split(","));
+            String phoneMac = lineList.get(2);
+            //  TD 接口调用
+            final String join = tdCall.parserData(client, phoneMac);
+            if (StringUtils.isNotBlank(join)) {
+                final String res = line + "," + join + "\n";
+                //解析完成后写出的结果文件csv
+                FileUtils.writeStringToFile(resFile, res, "gbk", true);
+            } else {
+                final String res = line + "," + ",,,,,," + "\n";
+                //解析完成后写出的结果文件csv
+                FileUtils.writeStringToFile(resFile, res, "gbk", true);
             }
         }
-
 
     }
 

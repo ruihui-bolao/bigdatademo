@@ -1,5 +1,7 @@
-package sdyc.bailuyuan;
+package bailuyuan;
 
+import bailuyuan.service.TDDataService;
+import bailuyuan.service.TDDataServiceImpl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -15,8 +17,6 @@ import org.apache.http.util.EntityUtils;
 import org.joda.time.DateTime;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.CollectionUtils;
-import sdyc.bailuyuan.service.TDDataService;
-import sdyc.bailuyuan.service.TDDataServiceImpl;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -46,7 +46,7 @@ public class TDCall {
 
     static {
         final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:jdbcContext.xml");
-        tdDataService =  (TDDataServiceImpl)context.getBean("tdDataService");
+        tdDataService = (TDDataServiceImpl) context.getBean("tdDataService");
     }
 
     /**
@@ -177,7 +177,7 @@ public class TDCall {
         String consumeTagString = StringUtils.join(consumeTagList, "|");
         tagList.add(consumeTagString);
 
-        //==================================================================================//
+/*        //==================================================================================//
         //常在城市信息查询接口
         //==================================================================================//
         final String cityurl = "https://api.talkingdata.com/data/user-loc-city/v1?";
@@ -197,6 +197,40 @@ public class TDCall {
                     }
                 } else {
                     cityTagList.add(citys);
+                }
+            }
+        } else {
+            cityTagList.add("");
+        }
+
+        String cityTagListString = StringUtils.join(cityTagList, "|");
+        tagList.add(cityTagListString);*/
+
+        //==================================================================================//
+        //常在城市信息查询接口
+        //==================================================================================//
+        final String cityurl = "https://api.talkingdata.com/data/user-loc-city/v2?";
+
+        final JSONArray citytag = getCityDataByMonth(client, cityurl, id, 1);
+
+        final ArrayList<String> cityTagList = new ArrayList<String>();
+
+        if (citytag != null && citytag.size() != 0) {
+            for (Object obj : citytag) {
+                final JSONObject jsonObject = (JSONObject) obj;
+                Object location = jsonObject.get("location");
+                if (location != null && location instanceof JSONArray) {
+                    JSONArray array = (JSONArray) location;
+                    if (array.size() > 0) {
+                        for (Object o : array) {
+                            JSONObject object = (JSONObject) o;
+                            cityTagList.add(object.getString("province") + object.getString("city"));
+                        }
+                    } else {
+                        cityTagList.add("");
+                    }
+                } else {
+                    cityTagList.add("");
                 }
             }
         } else {
@@ -234,8 +268,6 @@ public class TDCall {
 
         String deviceTagString = StringUtils.join(deviceTagList, "|");
         tagList.add(deviceTagString);
-
-
 
 
         //============================================================================//
