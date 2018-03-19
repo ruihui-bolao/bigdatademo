@@ -33,6 +33,7 @@
         <module>sparkhive</module>
         <module>algorithms</module>
         <module>sparkes</module>
+        <module>flumehttpsource</module>
     </modules>
 
     <properties>
