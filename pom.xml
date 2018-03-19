@@ -31,7 +31,6 @@
         <module>esjavademo</module>
         <module>utils</module>
         <module>sparkhive</module>
-        <module>algorithms</module>
         <module>sparkes</module>
         <module>flumehttpsource</module>
     </modules>
