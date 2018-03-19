@@ -32,7 +32,7 @@
         <module>utils</module>
         <module>sparkhive</module>
         <module>sparkes</module>
-        <module>flumehttpsource</module>
+        <module>flume</module>
     </modules>
 
     <properties>
