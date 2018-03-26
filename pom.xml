@@ -33,6 +33,9 @@
         <module>sparkhive</module>
         <module>sparkes</module>
         <module>flume</module>
+        <module>shidaiTDDB</module>
+        <module>shidaiTD</module>
+        <module>kafkademo</module>
     </modules>
 
     <properties>
