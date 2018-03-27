@@ -36,6 +36,7 @@
         <module>shidaiTDDB</module>
         <module>shidaiTD</module>
         <module>kafkademo</module>
+        <module>javapython</module>
     </modules>
 
     <properties>
