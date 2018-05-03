@@ -1,14 +1,10 @@
 package bailuyuan;
 
 import bailuyuan.util.DateUtils;
-import bailuyuan.util.HttpUtils;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -150,7 +146,7 @@ public class BaiLuYuan {
             File dataFile = new File(dataPath);
             int i = 0;
             for (ArrayList<String> list : resList) {
-                System.out.printf("开始处理第%d条数据",++i);
+                System.out.printf("开始处理第%d条数据", ++i);
                 String phoneMac = list.get(0);
                 String timeStr = resMap.get(phoneMac);
                 String[] split = timeStr.split(",");
@@ -249,9 +245,11 @@ public class BaiLuYuan {
 
     public static void main(String[] args) throws Exception {
 
-        // 从 excel 中读取数据 并临时保存
+        // 从 excel 中读取数据 并临时保存(ssdb数据导出后保存文件)
         String sourcePath = "C:\\Users\\sssd\\Desktop\\bailuyuan\\bailuyuan_3.xlsx";
+        // 按要求整理数据格式
         String saveTempPath = "C:\\Users\\sssd\\Desktop\\bailuyuan\\temp_3.csv";
+        // 将数据去重后用来调用TD接口
         String uniquePath = "C:\\Users\\sssd\\Desktop\\bailuyuan\\uniqueTemp.txt";
 
 /*        // 合并文件
@@ -263,8 +261,8 @@ public class BaiLuYuan {
         System.out.println(removal);*/
 
 
-        // 调用Td接口
-        File resFile = new File("C:\\Users\\sssd\\Desktop\\bailuyuan\\res.csv");
+        // 调用Td接口，用来保存结果的数据
+      /*  File resFile = new File("C:\\Users\\sssd\\Desktop\\bailuyuan\\res.csv");
         //获取本次访问权限认证(accessToken)的url
         CloseableHttpClient client = HttpUtils.getHttpClient();
         final String tdtoken = "https://api.talkingdata.com/tdmkaccount/authen/app/v2?";
@@ -287,7 +285,7 @@ public class BaiLuYuan {
                 //解析完成后写出的结果文件csv
                 FileUtils.writeStringToFile(resFile, res, "gbk", true);
             }
-        }
+        }*/
 
     }
 
