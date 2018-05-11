@@ -76,8 +76,8 @@ public class FileUtils {
     }
 
     public static void main(String[] args) throws Exception {
-        String inputPath = "C:\\Users\\sssd\\Desktop\\temp";
-        String savaPath = "C:\\Users\\sssd\\Desktop\\temp\\a.json";
+        String inputPath = "C:\\Users\\sssd\\Desktop\\huitemp";
+        String savaPath = "C:\\Users\\sssd\\Desktop\\huitemp\\a.json";
         StringBuffer stringBuffer = FileUtils.combineFile(inputPath);
         System.out.println(stringBuffer.toString());
         FileUtils.savaFile(stringBuffer, savaPath);
