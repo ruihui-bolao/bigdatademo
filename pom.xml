@@ -37,7 +37,6 @@
         <module>shidaiTD</module>
         <module>kafkademo</module>
         <module>javapython</module>
-        <module>javagui</module>
         <module>javahttp</module>
     </modules>
 
