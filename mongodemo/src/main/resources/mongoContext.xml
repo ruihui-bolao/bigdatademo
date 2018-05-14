@@ -3,13 +3,13 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:p="http://www.springframework.org/schema/p"
-       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:task="http://www.springframework.org/schema/task" xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans.xsd
 	       http://www.springframework.org/schema/context
 	       http://www.springframework.org/schema/context/spring-context.xsd
 	       http://www.springframework.org/schema/task
-	       http://www.springframework.org/schema/task/spring-task.xsd">
+	       http://www.springframework.org/schema/task/spring-task.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 
     <!-- mongo -->
@@ -41,5 +41,16 @@
         <constructor-arg name="databaseName" value="${mongo.dbName}"/>
         <constructor-arg name="userCredentials" ref="userCredentials"/>
     </bean>
+
+    <util:list id="mongoDbs" value-type="java.lang.String">
+        <value>currDay1</value>
+        <value>currDay2</value>
+        <value>currDay3</value>
+    </util:list>
+
+    <util:map id = "parms" key-type="java.lang.String" value-type="java.lang.Object">
+        <entry key="mongoDbList" value-ref="mongoDbs"/>
+        <entry key="mongoServer" value="${mongo.server}"/>
+    </util:map>
 
 </beans>

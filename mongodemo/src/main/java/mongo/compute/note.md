@@ -1,0 +1,1 @@
+主要是通过javaScript来实现Mongo中的mapreduce统计。
