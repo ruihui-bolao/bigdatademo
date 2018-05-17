@@ -6,9 +6,8 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
-import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,17 +15,15 @@ import java.util.concurrent.LinkedBlockingQueue;
  * Date: 2018/5/14 15:08
  * Version: V1.0
  * To change this template use File | Settings | File Templates.
- * Description:   其中一个线程用来添加内容，另一个线程用来将添加的内容保存在本地文件，测试保存文件会不会丢失。（LinkedBlockingQueue）
+ * Description: 其中一个线程用来添加内容，另一个线程用来将添加的内容保存在本地文件，测试保存文件会不会丢失。（CopyOnWriteArrayList，测试的时候发现丢失文件）
  */
-public class ThreadSaveFile {
+public class ThreadSaveFile2 {
 
-    private LinkedBlockingQueue<String> DATA_LISTS = new LinkedBlockingQueue<String>();
+    private CopyOnWriteArrayList<String> DATA_LISTS = new CopyOnWriteArrayList<String>();
+
     protected String uploadPath = "C:\\Users\\sssd\\Desktop\\data";
 
     protected File file = null;
-
-    private int a1 = 0;
-
 
     class AddValueThread extends Thread {
         @Override
@@ -37,44 +34,38 @@ public class ThreadSaveFile {
                 String name = Thread.currentThread().getName();
                 String temp = name + "当前开始第当前开始第当前第当始第当前前开开始第第当前开始第当前开始第当前开始第当前开始第当前开始第当前开始第当前开始第当前开始第当前开始第当前开始第当前开始第当前开始第当前开始第当前开始第当前开始第当前开始第" + i + "操作";
                 System.out.println(temp);
-                try {
-                    DATA_LISTS.put(temp);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                DATA_LISTS.add(temp);
                 i++;
             }
 
             all_num = all_num + DATA_LISTS.size();
+            System.out.println("@@@总共大小" + all_num);
         }
     }
 
     class DataSaveThread extends Thread {
         @Override
         public void run() {
-            List<String> dataLists = new CopyOnWriteArrayList<String>();
             while (true) {
-                try {
-                    String tempTake = DATA_LISTS.take();
-                    dataLists.add(tempTake);
-                    if (dataLists.size() > 5) {
-                        String name = Thread.currentThread().getName();
-                        final DateTime dateTime = DateTime.now();
-                        final String yyyyMMdd = dateTime.toString("yyyyMMdd");
-                        final int hourOfDay = dateTime.getHourOfDay();
-                        final String parent = uploadPath.endsWith(File.separator) ? uploadPath + yyyyMMdd : uploadPath + File.separator + yyyyMMdd;
-                        mkdir(parent);
-                        file = new File(parent, "WIFI-DATA" + ".json");
-                        final String datas = StringUtils.join(dataLists, "\n");
-                        if (StringUtils.isNotBlank(datas)) {
-                            writeFile(file, datas);
-                        }
-                        a1 += dataLists.size();
-                        dataLists.clear();
-                        System.out.println("###" + a1);
+                String name = Thread.currentThread().getName();
+                if (DATA_LISTS.size() >= 5) {
+                    System.out.println("线程" + name + "开始执行操作！");
+                    final DateTime dateTime = DateTime.now();
+
+                    final String yyyyMMdd = dateTime.toString("yyyyMMdd");
+
+                    final int hourOfDay = dateTime.getHourOfDay();
+
+                    final String parent = uploadPath.endsWith(File.separator) ? uploadPath + yyyyMMdd : uploadPath + File.separator + yyyyMMdd;
+                    mkdir(parent);
+                    file = new File(parent, "WIFI-DATA" + ".json");
+
+                    CopyOnWriteArrayList<String> data_lists = DATA_LISTS;
+                    final String datas = StringUtils.join(data_lists, "\n");
+                    if (StringUtils.isNotBlank(datas)) {
+                        writeFile(file, datas);
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    DATA_LISTS.removeAll(data_lists);
                 }
             }
         }
@@ -147,7 +138,7 @@ public class ThreadSaveFile {
     }
 
     public static void main(String[] args) throws Exception {
-        ThreadSaveFile threadSaveFile = new ThreadSaveFile();
+        ThreadSaveFile2 threadSaveFile = new ThreadSaveFile2();
         AddValueThread addValueThread = threadSaveFile.new AddValueThread();
         DataSaveThread dataSaveThread = threadSaveFile.new DataSaveThread();
         dataSaveThread.setName("保存");

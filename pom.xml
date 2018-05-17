@@ -38,6 +38,7 @@
         <module>kafkademo</module>
         <module>javapython</module>
         <module>javahttp</module>
+        <module>FIleThreadSave</module>
     </modules>
 
     <properties>
