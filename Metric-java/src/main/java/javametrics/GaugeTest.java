@@ -1,4 +1,4 @@
-package com.ruihui.javametrics;
+package javametrics;
 
 import com.codahale.metrics.ConsoleReporter;
 import com.codahale.metrics.Gauge;
@@ -21,6 +21,7 @@ public class GaugeTest {
     public static Queue<String> q = new LinkedList<String>();
 
     public static void main(String[] args) {
+
         MetricRegistry registry = new MetricRegistry();
         ConsoleReporter reporter = ConsoleReporter.forRegistry(registry).build();
         reporter.start(1, TimeUnit.SECONDS);

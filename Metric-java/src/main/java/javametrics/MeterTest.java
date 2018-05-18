@@ -1,4 +1,4 @@
-package com.ruihui.javametrics;
+package javametrics;
 
 import com.codahale.metrics.ConsoleReporter;
 import com.codahale.metrics.Meter;
