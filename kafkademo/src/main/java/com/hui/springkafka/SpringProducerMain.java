@@ -20,7 +20,7 @@ public class SpringProducerMain {
         for (int i = 1; i < 5; i++) {
             String msg = "msg-" + i;
             //向topicOne发送消息
-            kafkaTemplate.send("testhui", msg);
+            kafkaTemplate.send("test", msg);
             System.out.println("send msg  : " + msg);
         }
     }
