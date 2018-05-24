@@ -39,6 +39,7 @@
         <module>javapython</module>
         <module>javahttp</module>
         <module>FIleThreadSave</module>
+        <module>sparkstreaming-kafka</module>
     </modules>
 
     <properties>
@@ -243,7 +244,6 @@
             <artifactId>metrics-core</artifactId>
             <version>3.1.2</version>
         </dependency>
-
     </dependencies>
 
     <build>
