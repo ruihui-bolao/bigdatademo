@@ -84,7 +84,7 @@ public class StreamingKafkaDirect {
                 offsetRanges.set(offsets);
                 System.out.println("@@@@ 获取的offset大小为：" + offsets.length);
                 for (OffsetRange offset : offsets) {
-                    System.out.println("@@@@ 对应的每个offset为：" + offset.topic() + "|" + offset.count() + "|" + offset.fromOffset() +"|" + offset.toString());
+                    System.out.println("@@@@ 对应的每个offset为：" + offset.topic() + "|" + offset.count() + "|" + offset.fromOffset() + "|" + offset.toString());
                 }
                 List<String> collect = rdd.collect();
                 System.out.println("**** 获取kafka的数据为：" + collect);
