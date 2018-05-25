@@ -1,4 +1,4 @@
-package com.hui.kafka;
+package com.hui.readfromkafka;
 
 import kafka.common.TopicAndPartition;
 import kafka.message.MessageAndMetadata;
@@ -44,7 +44,7 @@ public class JavaKafkaManager implements Serializable {
     }
 
     /**
-     * kafka 创建 DirctStraam
+     * readfromkafka 创建 DirctStraam
      *
      * @param jssc
      * @param kafkaParams
@@ -61,13 +61,13 @@ public class JavaKafkaManager implements Serializable {
             scala.collection.immutable.Set immutableTopics = JavaConversions.asScalaSet(topics).toSet();
             Either<ArrayBuffer<Throwable>, scala.collection.immutable.Set<TopicAndPartition>> partitionEaily = kafkaCluster.getPartitions(immutableTopics);
             if (partitionEaily.isLeft()) {
-                throw new SparkException("get kafka partition failed: ${partitionEaily.left.get}");
+                throw new SparkException("get readfromkafka partition failed: ${partitionEaily.left.get}");
             }
             scala.collection.immutable.Set<TopicAndPartition> partitionNow = partitionEaily.right().get();
             Either<ArrayBuffer<Throwable>, scala.collection.immutable.Map<TopicAndPartition, Object>>
                     consumerOffsetsEaily = kafkaCluster.getConsumerOffsets(groupId, partitionNow);
             if (consumerOffsetsEaily.isLeft()) {
-                throw new SparkException("get kafka consumer offsets failed: ${consumerOffsetsE.left.get}");
+                throw new SparkException("get readfromkafka consumer offsets failed: ${consumerOffsetsE.left.get}");
             }
             scala.collection.immutable.Map<TopicAndPartition, Object> consumerOffsetsTemp = consumerOffsetsEaily.right().get();
             Map<TopicAndPartition, Object> consumerOffsets = JavaConversions.asJavaMap(consumerOffsetsTemp);
@@ -76,6 +76,15 @@ public class JavaKafkaManager implements Serializable {
                 consumerOffsetsLong.put(key, (Long) consumerOffsets.get(key));
             }
 
+            /**
+             * jssc：JavaSaprkStreamingContext
+             * String.class: key值类型
+             * String.class: value类型
+             * StringDecoder.class: 解码器
+             * kafkaParams: kafka的配置参数
+             * consumerOffsetsLong: readfromkafka consumer offset
+             * new Function: 返回kafka数据源的信息
+             */
             message = KafkaUtils.createDirectStream(jssc,
                     String.class,
                     String.class,
@@ -112,7 +121,7 @@ public class JavaKafkaManager implements Serializable {
             Either<ArrayBuffer<Throwable>, scala.collection.immutable.Set<TopicAndPartition>> partitionsEarly = kafkaCluster.getPartitions(immutableTopic);
             // isleft 表示在该分区之前还有没有读到的分区
             if (partitionsEarly.isLeft()) {
-                throw new SparkException("get kafka partition failed: ${partitionsE.left.get}");
+                throw new SparkException("get readfromkafka partition failed: ${partitionsE.left.get}");
             }
 
             // 获取kafka consumer 的 offset（是从zk中获取的）

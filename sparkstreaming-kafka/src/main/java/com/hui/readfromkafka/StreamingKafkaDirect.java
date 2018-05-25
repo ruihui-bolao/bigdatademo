@@ -1,4 +1,4 @@
-package com.hui.kafka;
+package com.hui.readfromkafka;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * Date: 2018/5/23 11:41
  * Version: V1.0
  * To change this template use File | Settings | File Templates.
- * Description:   spark streaming direct kafka 读取kafka中的数据（进行词频统计）
+ * Description:   spark streaming direct readfromkafka 读取kafka中的数据（进行词频统计）
  */
 public class StreamingKafkaDirect {
 
@@ -66,7 +66,7 @@ public class StreamingKafkaDirect {
         kafkaParams.put("metadata.broker.list", properties.getProperty("metadata.broker.list"));
         kafkaParams.put("group.id", properties.getProperty("group.id"));
         kafkaParams.put("auto.offset.reset", "smallest");
-        // kafka topics
+        // readfromkafka topics
         HashSet<String> topics = new HashSet<String>();
         topics.add("test");
 
