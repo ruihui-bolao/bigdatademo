@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
  * Date: 2018/2/26 16:42
  * Version: V1.0
  * To change this template use File | Settings | File Templates.
- * Description:   Spring + kafka 消费
+ * Description:   Spring + readfromkafka 消费
  */
 public class SpringConsumerMain {
 

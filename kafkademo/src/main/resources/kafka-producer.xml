@@ -17,7 +17,7 @@
         <constructor-arg>
             <map>
                 <entry key="bootstrap.servers" value="${metadata.broker.list}" />
-                <entry key="group.id" value="${kafka.topic}"/>
+                <entry key="group.id" value="${group.id}"/>
                 <entry key="retries" value="3"/>
                 <entry key="batch.size" value="16384"/>
                 <entry key="linger.ms" value="1"/>
@@ -34,6 +34,6 @@
     <bean id="kafkaTemplate" class="org.springframework.kafka.core.KafkaTemplate">
         <constructor-arg ref="kafkaProducerFactory" />
         <constructor-arg name="autoFlush" value="true"/>
-        <property name="defaultTopic" value="testhui"/>
+        <property name="defaultTopic" value="${kafka.topic}"/>
     </bean>
 </beans>
