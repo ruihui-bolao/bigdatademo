@@ -18,7 +18,7 @@ import java.util.Random;
  * Date: 2018/3/12 10:49
  * Version: V1.0
  * To change this template use File | Settings | File Templates.
- * Description:    kafka 生产者单例模式
+ * Description:    readfromkafka 生产者单例模式
  */
 public class KafkaProducerSingleton {
 
@@ -28,7 +28,7 @@ public class KafkaProducerSingleton {
     private static final Logger LOG = LoggerFactory.getLogger(KafkaProducerSingleton.class);
 
     /**
-     * kafkaproducer  kafka 生产这是线程安全的。
+     * kafkaproducer  readfromkafka 生产这是线程安全的。
      */
     private static KafkaProducer<String, String> kafkaProducer;
 
@@ -38,12 +38,12 @@ public class KafkaProducerSingleton {
     private Random random = new Random();
 
     /**
-     * kafka topic
+     * readfromkafka topic
      */
     private String topic;
 
     /**
-     * kafka 尝试发送次数
+     * readfromkafka 尝试发送次数
      */
     private int retry;
 
@@ -68,13 +68,13 @@ public class KafkaProducerSingleton {
     }
 
     /**
-     * kafka 生产者进行初始化
+     * readfromkafka 生产者进行初始化
      *
-     * @param topic  kafka topic
+     * @param topic  readfromkafka topic
      * @param retry  发送不成功尝试次数
      */
     public void init(String topic, int retry) {
-        // kafka topic
+        // readfromkafka topic
         this.topic = topic;
         // 发送消息失败后，尝试的次数
         this.retry = retry;
@@ -85,7 +85,7 @@ public class KafkaProducerSingleton {
             try {
                 inputStream = this.getClass().getClassLoader().getResourceAsStream("kafkaProducer.properties");
                 props.load(inputStream);
-                // 初始化 kafka producer
+                // 初始化 readfromkafka producer
                 kafkaProducer = new KafkaProducer<String, String>(props);
             } catch (IOException e) {
                 System.out.println("初始化失败：" + e);
@@ -139,7 +139,7 @@ public class KafkaProducerSingleton {
     }
 
     /**
-     * kafka 的实例销毁
+     * readfromkafka 的实例销毁
      */
     public void close(){
         if (null != kafkaProducer){

@@ -16,7 +16,7 @@ import java.util.List;
  * Date: 2018/3/12 12:02
  * Version: V1.0
  * To change this template use File | Settings | File Templates.
- * Description:   kafka consumer 多线程
+ * Description:   readfromkafka consumer 多线程
  */
 public class ConsumerThread implements Runnable {
 
@@ -26,14 +26,14 @@ public class ConsumerThread implements Runnable {
     private ConsumerRecords<String, String> records;
 
     /**
-     *  kafka consumer
+     *  readfromkafka consumer
      */
     private KafkaConsumer<String, String> consumer;
 
     /**
      *  构造器，初始化ConsumerThread ,
      * @param records  consumer 消费到的数据
-     * @param consumer kafka consumer
+     * @param consumer readfromkafka consumer
      */
     public ConsumerThread(ConsumerRecords<String,String> records, KafkaConsumer<String,String> consumer){
         this.records = records;

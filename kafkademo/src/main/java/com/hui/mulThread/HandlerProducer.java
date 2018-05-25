@@ -9,12 +9,12 @@ import java.util.concurrent.Executors;
  * Date: 2018/3/12 11:35
  * Version: V1.0
  * To change this template use File | Settings | File Templates.
- * Description:  kafka 生产者的 多线程模式
+ * Description:  readfromkafka 生产者的 多线程模式
  */
 public class HandlerProducer implements Runnable{
 
     /**
-     * kafka 的发送消息
+     * readfromkafka 的发送消息
      */
     private String message;
 

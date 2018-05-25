@@ -17,12 +17,12 @@ import java.util.concurrent.TimeUnit;
  * Date: 2018/3/12 11:48
  * Version: V1.0
  * To change this template use File | Settings | File Templates.
- * Description:    kafka 的生产者
+ * Description:    readfromkafka 的生产者
  */
 public final class ConsumerKafka {
 
     /**
-     * kafka consumer : kafka 消费者不是线程安全的。
+     * readfromkafka consumer : readfromkafka 消费者不是线程安全的。
      */
     private KafkaConsumer<String, String> consumer;
 
@@ -32,7 +32,7 @@ public final class ConsumerKafka {
     private ExecutorService executorService;
 
     /**
-     * 构造器初始化 kafka consumer
+     * 构造器初始化 readfromkafka consumer
      */
     public ConsumerKafka() {
         // 加载配置文件
@@ -42,12 +42,12 @@ public final class ConsumerKafka {
             // 加载配置文件
             inputStream = this.getClass().getClassLoader().getResourceAsStream("kafkaConsumer.properties");
             properties.load(inputStream);
-            // 初始化 kafka consumer
+            // 初始化 readfromkafka consumer
             consumer = new KafkaConsumer<String, String>(properties);
-            // kafka consumer 订阅的 topic
+            // readfromkafka consumer 订阅的 topic
             consumer.subscribe(Arrays.asList("accesslog"));
         } catch (IOException e) {
-            System.out.println("kafka consumer 初始化失败： " + e);
+            System.out.println("readfromkafka consumer 初始化失败： " + e);
         }
     }
 
