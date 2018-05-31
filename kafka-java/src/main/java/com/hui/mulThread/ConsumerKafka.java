@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  * Date: 2018/3/12 11:48
  * Version: V1.0
  * To change this template use File | Settings | File Templates.
- * Description:    readfromkafka 的生产者
+ * Description:    readfromkafka 的消费者
  */
 public final class ConsumerKafka {
 
