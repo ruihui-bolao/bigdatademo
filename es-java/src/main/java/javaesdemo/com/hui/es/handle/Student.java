@@ -1,4 +1,4 @@
-package javaesdemo;
+package javaesdemo.com.hui.es.handle;
 
 /**
  * Created with IntelliJ IDEA.

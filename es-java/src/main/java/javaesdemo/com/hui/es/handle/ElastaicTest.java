@@ -1,4 +1,4 @@
-package javaesdemo;
+package javaesdemo.com.hui.es.handle;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.action.bulk.BulkItemResponse;
