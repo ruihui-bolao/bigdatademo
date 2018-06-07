@@ -1,2 +1,0 @@
-dubbo 的测试demo,源程序中Java中注册dubbo,并启动暴漏服务端口，
-测试程序总java 消费dubbo.

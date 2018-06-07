@@ -12,7 +12,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.hui.test</groupId>
-    <artifactId>kafkademo</artifactId>
+    <artifactId>kafka-java</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>

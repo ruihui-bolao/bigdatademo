@@ -10,36 +10,24 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>zookeeperdemo</module>
-        <module>googleguava</module>
         <module>mongodemo</module>
-        <module>berkeleydemo</module>
         <module>jmsdemo</module>
         <module>protobufdemo</module>
         <module>avrodemo</module>
         <module>sparkwork</module>
-        <module>dubbodemo</module>
-        <module>springaopdemo</module>
         <module>redisdemo</module>
         <module>aopredisdemo</module>
-        <module>javamysql</module>
         <module>sparksqludf</module>
         <module>sparkrdd</module>
-        <module>java-netty</module>
-        <module>DES</module>
         <module>esconnect</module>
-        <module>sparkhbase</module>
-        <module>esjavademo</module>
-        <module>utils</module>
-        <module>sparkhive</module>
-        <module>sparkes</module>
+        <module>hbase-spark</module>
+        <module>hive-spark</module>
+        <module>es-spark</module>
+        <module>es-java</module>
         <module>flume</module>
-        <module>shidaiTDDB</module>
-        <module>shidaiTD</module>
-        <module>kafkademo</module>
         <module>javapython</module>
-        <module>javahttp</module>
-        <module>FIleThreadSave</module>
-        <module>sparkstreaming-kafka</module>
+        <module>kafka-java</module>
+        <module>kafka-sparkstreaming</module>
     </modules>
 
     <properties>
