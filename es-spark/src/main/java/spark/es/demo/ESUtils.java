@@ -18,29 +18,39 @@ import org.apache.spark.api.java.function.PairFlatMapFunction;
 import org.elasticsearch.hadoop.cfg.ConfigurationOptions;
 import org.elasticsearch.hadoop.mr.EsInputFormat;
 import org.elasticsearch.hadoop.mr.EsOutputFormat;
+import org.elasticsearch.hadoop.mr.WritableArrayWritable;
 import org.elasticsearch.hadoop.util.WritableUtils;
 import scala.Tuple2;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
-import org.elasticsearch.hadoop.mr.WritableArrayWritable;
 
 /**
  * <pre>
  * Created with IntelliJ IDEA.
- * User: ly
+ * User: ruihui
  * Date: 2017/7/19
  * Time: 10:41
  * To change this template use File | Settings | File Templates.
  * </pre>
  *
- * @author ly
+ * @author ruihui
+ */
+
+/**
+ * spark - es 的工具类
  */
 public class ESUtils implements Serializable {
+    /**
+     * 日志文件
+     */
     protected static Log LOG = LogFactory.getLog(ESUtils.class);
 
+    /**
+     * 存放es index-type 对应的map
+     */
     public static final HashMap<String, String> ES_INDEX_TYPE_MAP = new HashMap<String, String>(3);
-
 
     /**
      * AND(与)关键词
@@ -58,7 +68,7 @@ public class ESUtils implements Serializable {
     public static final String NOT_KEYS = "NOT_KEYS";
 
     /**
-     * 数据类型与es索引类型映射
+     *  es index/type map
      */
     static {
         ES_INDEX_TYPE_MAP.put("WQ_MOVIES", "wzx_movies/movies");
@@ -71,24 +81,26 @@ public class ESUtils implements Serializable {
     }
 
     /**
-     * spark写ES相关配置
+     * 向es的配置文件中追加es的相关配置
      *
-     * @param conf       配置实体类
-     * @param esId
-     * @param esResource
-     * @param esNodes
+     * @param conf       初始化的配置文件
+     * @param esId       设置es的主键ID
+     * @param esResource es中index/type
+     * @param esNodes    es集群服务器nodes
      * @return
      */
     public static Configuration buildWriteESConf(Configuration conf, String esId, String esResource, String esNodes) {
+        // es index 自动创建
         conf.set("es.index.auto.create", "true");
 
-        //指定索引名称
+        // 指定es index/type
         conf.set("es.resource", esResource);
 
         /**
          * es.mapping.id (default none) *
          The document field/property name containing the document id.
          */
+        // 设置es主键id
         conf.set("es.mapping.id", esId);
 
         /**
@@ -101,10 +113,10 @@ public class ESUtils implements Serializable {
          */
         //conf.set("es.write.operation", "upsert");
 
-        //很重要,这个属性
+        //很重要,这个属性（当前任务的第几次重试）
         conf.set("mapred.tip.id", "task_201707121733_0003_m_000005");
 
-        //指定es节点
+        //指定es集群服务器的节点
         conf.set("es.nodes", esNodes);
 
         return conf;
@@ -114,8 +126,8 @@ public class ESUtils implements Serializable {
     /**
      * 写数据到es
      *
-     * @param javaRDD
-     * @param conf
+     * @param javaRDD 待写入的数据javaRDD
+     * @param conf    es集群的相关配置文件
      */
     public static void sparkWriteToEs(JavaRDD<String> javaRDD, Configuration conf) {
         javaRDD.mapPartitionsToPair(new PairFlatMapFunction<Iterator<String>, NullWritable, MapWritable>() {
@@ -123,19 +135,22 @@ public class ESUtils implements Serializable {
             public Iterable<Tuple2<NullWritable, MapWritable>> call(Iterator<String> iterator) throws Exception {
                 final LinkedList<Tuple2<NullWritable, MapWritable>> list = new LinkedList<Tuple2<NullWritable, MapWritable>>();
                 while (iterator.hasNext()) {
+                    // 初始化 MapWritable
                     final MapWritable writableMap = new MapWritable();
                     try {
+                        // 获取文件的内容
                         final String next = iterator.next();
+                        // 将内容解析为json
                         final JSONObject jsonObject = JSONObject.parseObject(next.trim());
-
+                        // 对文件的内容进行遍历
                         final Set<Map.Entry<String, Object>> entries = jsonObject.entrySet();
-
+                        // 如果网页 url 不为空，则进行遍历。
                         final String url = jsonObject.getString("url");
                         if (StringUtils.isNotBlank(url)) {
-
+                            // 开始遍历
                             for (Map.Entry<String, Object> entry : entries) {
                                 final Object entryValue = entry.getValue();
-
+                                // 判断读取的文件内容是否是BigDecimal，如果是则对数据进行处理。
                                 if (entryValue instanceof BigDecimal) {
                                     BigDecimal a = new BigDecimal(((BigDecimal) entryValue).doubleValue());
                                     writableMap.put(new Text(entry.getKey()), WritableUtils.toWritable(a.doubleValue()));

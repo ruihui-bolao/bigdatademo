@@ -28,6 +28,7 @@
         <module>javapython</module>
         <module>kafka-java</module>
         <module>kafka-sparkstreaming</module>
+        <module>hivesql_parse</module>
     </modules>
 
     <properties>

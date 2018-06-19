@@ -11,12 +11,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ *  EsUtils的测试类
+ */
 public class ESUtilsTest {
-
+    /**
+     *  设置es的index/type(es的索引index相当于数据库和类型type相当于数据表)
+     */
     public static String esIndexs;
+    /**
+     * es 集群的服务器节点
+     */
     public static String esNodes;
+
+    /**
+     * 任务类型
+     */
     public static Integer taskType;
+
+    /**
+     * 数据类型
+     */
     public static String dataType;
 
     static {
@@ -32,6 +47,7 @@ public class ESUtilsTest {
         Configuration conf = (Configuration) param.get("conf");
         JavaSparkContext sparkContext = SparkContextManager.getSparkContext();
         JavaRDD<String> javaRDD = sparkContext.textFile("file:///C:/Users/sssd/Desktop/huitemp/a.json");
+        // 向配置文件中追加es 的相关配置
         conf = ESUtils.buildWriteESConf(conf, "sectionUrn", esIndexs, esNodes);
         ESUtils.sparkWriteToEs(javaRDD, conf);
         System.out.println("保存数据完成");
