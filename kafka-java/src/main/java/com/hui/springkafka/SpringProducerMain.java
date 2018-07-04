@@ -1,5 +1,6 @@
 package com.hui.springkafka;
 
+import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -14,12 +15,14 @@ import org.springframework.kafka.core.KafkaTemplate;
  */
 public class SpringProducerMain {
 
-    public static void main(String[] args) {
+    @Test
+    public void test() {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:kafka-producer.xml");
         KafkaTemplate kafkaTemplate = ctx.getBean("kafkaTemplate", KafkaTemplate.class);
         for (int i = 1; i < 5; i++) {
             String msg = "msg-" + i;
-            kafkaTemplate.send("test", msg);
+            kafkaTemplate.send("hqu_test1", msg);
+            kafkaTemplate.send("hqu_test2", msg);
             System.out.println("send msg  : " + msg);
         }
     }

@@ -45,6 +45,7 @@
         <spark.version>1.6.1</spark.version>
         <hadoop.version>2.6.5</hadoop.version>
         <hive.version>1.2.2</hive.version>
+        <zookeeper.version>3.4.5</zookeeper.version>
     </properties>
 
     <dependencies>
