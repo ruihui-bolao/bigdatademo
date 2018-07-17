@@ -19,7 +19,6 @@
         <module>aopredisdemo</module>
         <module>sparksqludf</module>
         <module>sparkrdd</module>
-        <module>esconnect</module>
         <module>hbase-spark</module>
         <module>hive-spark</module>
         <module>es-spark</module>

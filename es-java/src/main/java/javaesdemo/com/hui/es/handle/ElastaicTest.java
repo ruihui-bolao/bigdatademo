@@ -197,6 +197,6 @@ public class ElastaicTest {
 
     public static void main(String[] args) throws Exception {
         ElastaicTest elastaicTest = new ElastaicTest();
-        elastaicTest.testSearch();
+        elastaicTest.bulk();
     }
 }

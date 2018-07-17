@@ -1,4 +1,4 @@
-package esconnect;
+package javaesdemo.com.hui.es.httpclient;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
@@ -20,12 +20,12 @@ import java.util.List;
  * Date: 2017/12/14 10:43
  * Version: V1.0
  * To change this template use File | Settings | File Templates.
- * Description:
+ * Description:   通过 JestClient 实现对es的增删改查
  */
 public class JestTestEs {
 
     /**
-     * jest 通过 JestClientFactory 获取连接
+     * jest 通过 JestClientFactory 获取 jestClient 连接
      *
      * @return
      * @throws Exception
@@ -51,19 +51,17 @@ public class JestTestEs {
     }
 
     /**
-     *  Jest 通过 HTTP 请求执行 es 查询命令
+     * Jest 通过 HTTP 请求执行 es 查询命令
+     *
      * @throws Exception
      */
     public void jestSearch() throws Exception {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-
         // searchSourceBuilder.query(QueryBuilders.multiMatchQuery(key,"title","type"));  // 通过关键词匹配指定的列
         searchSourceBuilder.query(QueryBuilders.matchAllQuery());  // 匹配所有的格式
-
         // 初始化查询语句，其中 addIndex 为索引，相当于数据库中的表名
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex("zhfwxt").build();
         JestClient client = getClient();
-
         // 连接执行 search 语句
         SearchResult execute = client.execute(search);
         Integer total = execute.getTotal();    // 获取查询结果的总数
@@ -71,22 +69,20 @@ public class JestTestEs {
     }
 
     /**
-     *  将文件 上传到 es 中
-     * @param key
+     * 将文件 上传到 es 中
+     *
      * @throws Exception
      */
-    public void contextLoads(String key) throws Exception{
+    public void contextLoads() throws Exception {
         JestClient client = getClient();
         List<Integer> list = Arrays.asList(1, 2, 3, 4, 5, 6, 7);
-
         // 对数据一个一个的进行插入
         for (Integer integer : list) {
             Index index = new Index.Builder(integer).index("zhfwxt").type("fulltext").id(Integer.toString(list.indexOf(integer))).build();
             System.out.println("添加索引-----》" + integer);
             client.execute(index);
         }
-
-        // 批量操作
+        //  bulk批量操作
         Bulk.Builder builder = new Bulk.Builder();
         for (Integer integer : list) {
             Index index = new Index.Builder(integer).index("zhfwxt").type("fulltext").id(Integer.toString(list.indexOf(integer))).build();
@@ -96,15 +92,9 @@ public class JestTestEs {
         client.shutdownClient();
     }
 
-
-    /**
-     * 测试 jest clent
-     * @param args
-     * @throws Exception
-     */
     public static void main(String[] args) throws Exception {
         JestTestEs jestTestEs = new JestTestEs();
-        jestTestEs.jestSearch();
+        jestTestEs.contextLoads();
     }
 
 }
