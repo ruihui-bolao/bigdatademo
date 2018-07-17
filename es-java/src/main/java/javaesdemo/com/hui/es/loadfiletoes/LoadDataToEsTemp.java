@@ -1,7 +1,6 @@
 package javaesdemo.com.hui.es.loadfiletoes;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.client.Client;
@@ -13,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,14 +20,14 @@ import java.net.UnknownHostException;
  * Date: 2018/5/31 10:07
  * Version: V1.0
  * To change this template use File | Settings | File Templates.
- * Description:   将解析的数据批量导入es中(数据是以json格式存储，一条数据是一个json，数据之间用回车分割。)
+ * Description:   将本地的文件导入到es
  */
-public class LoadDataToEs {
+public class LoadDataToEsTemp {
 
     /**
      * es 集群的连接
      */
-    private Client client;
+    public static Client client;
 
     /**
      * 构造器初始化
@@ -35,14 +35,12 @@ public class LoadDataToEs {
      * @param clusterName 集群名字
      * @param esHosts     集群ip  "10.10.2.1:9300,10.10.2.2:9300"
      */
-    public LoadDataToEs(String clusterName, String esHosts) {
-        // 初始化设置
+    public LoadDataToEsTemp(String clusterName, String esHosts) {
         Settings settings = Settings.builder().put("cluster.name", clusterName).build();
+        TransportClient client = TransportClient.builder().settings(settings).build();
 
         // 初始化连接
-        TransportClient client = TransportClient.builder().settings(settings).build();
         try {
-            // 将es集群添加到连接中
             String[] nodes = esHosts.split(",");
             for (String node : nodes) {
                 if (node.length() > 0) {
@@ -57,7 +55,8 @@ public class LoadDataToEs {
     }
 
     /**
-     *  将
+     * 将本地文件通过Java client 的方式导入到es中
+     *
      * @param sourcePath
      * @return
      */
@@ -72,37 +71,20 @@ public class LoadDataToEs {
             String line = null;
             // 批量提交数据
             BulkRequestBuilder bulkRequestBlock = client.prepareBulk();
-            BulkRequestBuilder bulkRequestTrans = client.prepareBulk();
             while ((line = reader.readLine()) != null) {
                 JSONObject blockJson = JSON.parseObject(line);
-                JSONArray transactions = blockJson.getJSONArray("Transactions");
-                blockJson.remove("Transactions");
-
-                // 准备写入block表
-                String blockIndex = blockJson.getString("BlockHash");
-                bulkRequestBlock.add(client.prepareIndex("bitcoin", "block").setSource(blockJson).setId(blockIndex));
-
-                // 准备写入transaction表
-                for (Object transaction : transactions) {
-                    JSONObject transJson = JSON.parseObject(String.valueOf(transaction));
-                    String transIndex = transJson.getString("TransactionHash");
-                    String blockHash = transJson.getString("BlockHash");
-                    bulkRequestTrans.add(client.prepareIndex("bitcoin", "transaction").setSource(transJson).setId(transIndex).setParent(blockHash));
-                }
-
+                blockJson.put("data", new Date());
+                bulkRequestBlock.add(client.prepareIndex("hui_test_post", "post_test").setSource(blockJson).setId(blockJson.getString("myid")));
                 if (count % 1000 == 0) {
                     batch++;
                     bulkRequestBlock.execute().actionGet();
-                    bulkRequestTrans.execute().actionGet();
                     String s = String.format("第" + batch + "次提交了:(" + count + ")");
                     System.out.println(s);
                     bulkRequestBlock.request().requests().clear();
-                    bulkRequestTrans.request().requests().clear();
                 }
                 count++;
             }
             bulkRequestBlock.execute().actionGet();
-            bulkRequestTrans.execute().actionGet();
             reader.close();
             client.close();
             return true;
@@ -116,8 +98,8 @@ public class LoadDataToEs {
     public static void main(String[] args) {
         String clusterName = "sd-es-2.3.3";
         String hosts = "192.168.1.235:9300,192.168.1.237:9300,192.168.1.238:9300";
-        String filePath = "C:\\Users\\sssd\\Desktop\\estest.txt";
-        LoadDataToEs loadDataToEs = new LoadDataToEs(clusterName, hosts);
+        String filePath = "C:\\Users\\sssd\\Desktop\\post.json";
+        LoadDataToEsTemp loadDataToEs = new LoadDataToEsTemp(clusterName, hosts);
         boolean b = loadDataToEs.importData(filePath);
         if (b) {
             System.out.println("插入完毕!");

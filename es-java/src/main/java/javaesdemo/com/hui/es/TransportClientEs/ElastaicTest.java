@@ -1,4 +1,4 @@
-package javaesdemo.com.hui.es.handle;
+package javaesdemo.com.hui.es.TransportClientEs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.action.bulk.BulkItemResponse;
@@ -38,6 +38,9 @@ import java.util.List;
  */
 public class ElastaicTest {
 
+    /**
+     * 构建 TransportClient
+     */
     TransportClient transportClient;
 
     /**
@@ -81,51 +84,65 @@ public class ElastaicTest {
     }
 
     /**
-     * 获取指定文档信息
+     * 获取es对应要查询的文档
+     *
+     * @param esId es中的主键id
      */
-    public void get() {
-        GetResponse getResponse = transportClient.prepareGet(index, type, "AWAvpQteeT8FH53rFzZY").get();    // index;es索引，type:es表格，id：对应es表格中的_id.
+    public void get(String esId) {
+        esId = "AWAvpQteeT8FH53rFzZY";
+        GetResponse getResponse = transportClient.prepareGet(index, type, esId).get();    // index;es索引，type:es表格，id：对应es表格中的_id.
         System.out.println(getResponse.getSourceAsString());
     }
 
     /**
      * 向 es 中插入数据，参数为 json 字符串
+     *
+     * @param jsonStr json 字符串
      */
-    public void indexJson() {
-        String str = "{\"author\":\"ccc\",\"id\":8}";
+    public void indexJson(String jsonStr) {
+        jsonStr = "{\"author\":\"ccc\",\"id\":8}";
         IndexResponse indexResponse = transportClient
-                .prepareIndex(index, type, "3").setSource(str).get();    // 其中的 id 为 es 表格中的主键
+                .prepareIndex(index, type, "3").setSource(jsonStr).get();    // 其中的 id 为 es 表格中的主键
         System.out.println(indexResponse.getVersion());
     }
 
     /**
      * 向 es 中插入数据，参数为map<String,Object>
+     *
+     * @param values map类型的数据格式
      */
-    public void indexMap() {
+    public void indexMap(HashMap<String, Object> values) {
         HashMap<String, Object> source = new HashMap<String, Object>(2);
         source.put("author", "ccc");
         source.put("id", "12");
-        IndexResponse indexResponse = transportClient.prepareIndex(index, type, "4").setSource(source).get();    //其中的 id 为 es 表格中的主键。
+        values = source;
+        IndexResponse indexResponse = transportClient.prepareIndex(index, type, "4").setSource(values).get();    //其中的 id 为 es 表格中的主键。
         System.out.println(indexResponse.getVersion());
     }
 
     /**
      * 向 es 中插入数据，参数为javaBean
+     *
+     * @param valueBean javabean 类型的数据格式
+     * @throws Exception
      */
-    public void indexBean() throws Exception {
+    public void indexBean(Student valueBean) throws Exception {
         Student student = new Student();
         student.setAuthor("hui");
         student.setId(21);
+        valueBean = student;
         ObjectMapper mapper = new ObjectMapper();
-        IndexResponse indexResponse = transportClient.prepareIndex(index, type, "5").setSource(mapper.writeValueAsString(student)).get();
+        IndexResponse indexResponse = transportClient.prepareIndex(index, type, "5").setSource(mapper.writeValueAsString(valueBean)).get();
         System.out.println(indexResponse.getVersion());
     }
 
     /**
-     * 删除文档
+     * 删除es指定的文档
+     *
+     * @param id es 主键id
      */
-    public void deleteIndex() {
-        String id = "21";
+    public void deleteIndex(String id) {
+        id = "21";
         DeleteResponse deleteResponse = transportClient.prepareDelete(index, type, id).get();
         System.out.println(deleteResponse.getVersion());
     }
@@ -145,20 +162,24 @@ public class ElastaicTest {
 
         //1, 生成 bulk
         BulkRequestBuilder bulk = transportClient.prepareBulk();
+
         //2，新增
         IndexRequest add = new IndexRequest(index, type, "10");
         add.source(XContentFactory.jsonBuilder().startObject()
                 .field("author", "hui").field("id", "25")
                 .endObject());
+
         //3，删除
         DeleteRequest del = new DeleteRequest(index, type, "3");
-        //4,修改
+
+        //4, 修改
         XContentBuilder source = XContentFactory.jsonBuilder().startObject().field("author", "hui01").field("id", "2501").endObject();
         UpdateRequest update = new UpdateRequest(index, type, "4");
         update.doc(source);
         bulk.add(del);     //添加删除功能
         bulk.add(add);     //添加新增功能
         bulk.add(update);  //添加修改功能
+
         //5，执行批次处理
         BulkResponse bulkResponse = bulk.get();
         if (bulkResponse.hasFailures()) {
@@ -174,7 +195,7 @@ public class ElastaicTest {
     /**
      * 查询索引库
      */
-    public void testSearch(){
+    public void testSearch() {
         SearchResponse searchResponse = transportClient.prepareSearch(index).setTypes(type).setQuery(QueryBuilders.matchAllQuery())    //查询所有
                 .setQuery(QueryBuilders.matchQuery("name", "tom").operator(MatchQueryBuilder.Operator.AND))  // 根据tom分词查询name,默认or
                 .setQuery(QueryBuilders.multiMatchQuery("tom", "name", "age"))  //指定查询的字段
@@ -188,8 +209,7 @@ public class ElastaicTest {
         long total = hits.getTotalHits();
         System.out.println(total);
         SearchHit[] searchHits = hits.hits();
-        for(SearchHit s : searchHits)
-        {
+        for (SearchHit s : searchHits) {
             System.out.println(s.getSourceAsString());
         }
     }

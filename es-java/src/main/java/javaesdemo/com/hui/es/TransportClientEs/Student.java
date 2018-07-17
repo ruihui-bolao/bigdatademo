@@ -1,4 +1,4 @@
-package javaesdemo.com.hui.es.handle;
+package javaesdemo.com.hui.es.TransportClientEs;
 
 /**
  * Created with IntelliJ IDEA.
