@@ -16,12 +16,12 @@ public class JavaPython {
     public static void main(String[] args) throws Exception {
 
         XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-        config.setServerURL(new URL("http://192.168.102.38:8888/RPC2"));
+        config.setServerURL(new URL("http://192.168.102.16:8888/RPC2"));
         XmlRpcClient client = new XmlRpcClient();
         client.setConfig(config);
-        String str = "我特别讨厌别人说居然离开银行去保险公司，目光短浅！";
-        Object[] objects = {str};
-        String res = (String)client.execute("lstmPre", objects);
+        double a = 0.6;
+        Object[] objects = {a};
+        Double res = (Double)client.execute("addNum", objects);
         System.out.println(res);
 
     }

@@ -1,6 +1,10 @@
 package mongo.connection;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.mongodb.DBObject;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -39,11 +43,22 @@ public class MongoDemo {
         mongo.connection.MongoDemo mongoDemo = new mongo.connection.MongoDemo();
         Query query = new Query();
         query.with(new Sort( new Sort.Order( Sort.Direction.DESC, "dwCreatedAt")));
-        query.skip(0).limit(10);
-        List<DBObject> test_ay = mongoDemo.mongoTemplate.find(query, DBObject.class, "currDay2");
+        List<DBObject> test_ay = mongoDemo.mongoTemplate.find(query, DBObject.class, "currDay1");
+        int i = 0;
         for (DBObject dbObject:test_ay ){
-            System.out.println(dbObject.toString());
+            JSONObject parse = (JSONObject) JSON.parse(dbObject.toString());
+            JSONArray data = parse.getJSONArray("data");
+            for (Object datum : data) {
+                JSONObject datum1 = (JSONObject) datum;
+                if (StringUtils.equalsIgnoreCase(datum1.getString("wifiMac"),"c8eea6290c0b")){
+                    System.out.println(parse);
+                    i++;
+                    break;
+                }
+            }
         }
+        System.out.println("总共有" + i + "条数据！");
+
 
         /*//按照时间段查询
         Date endDate = new Date();

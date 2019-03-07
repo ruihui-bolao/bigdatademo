@@ -3,13 +3,17 @@ package javaesdemo.com.hui.es.loadfiletoes;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.common.unit.TimeValue;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHits;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
@@ -53,6 +57,7 @@ public class LoadDataToEsTemp {
             e.printStackTrace();
         }
     }
+
 
     /**
      * 将本地文件通过Java client 的方式导入到es中
@@ -100,9 +105,10 @@ public class LoadDataToEsTemp {
         String hosts = "192.168.1.235:9300,192.168.1.237:9300,192.168.1.238:9300";
         String filePath = "C:\\Users\\sssd\\Desktop\\post.json";
         LoadDataToEsTemp loadDataToEs = new LoadDataToEsTemp(clusterName, hosts);
-        boolean b = loadDataToEs.importData(filePath);
+
+       /* boolean b = loadDataToEs.importData(filePath);
         if (b) {
             System.out.println("插入完毕!");
-        }
+        }*/
     }
 }

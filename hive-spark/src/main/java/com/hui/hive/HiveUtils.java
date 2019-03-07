@@ -155,7 +155,7 @@ public class HiveUtils implements Serializable {
     public static void main(String[] args) {
 
         //初始化配置文件
-        String dataBase = "test";
+        String dataBase = "etl";
         SparkConf conf = new SparkConf();
         conf.setMaster("local").setAppName("sparkHive");
         JavaSparkContext sparkContext = new JavaSparkContext(conf);
@@ -172,14 +172,25 @@ public class HiveUtils implements Serializable {
         System.out.println(res);*/
 
         //2，测试利用 spark 读取 hive 数据表。
-        String hiveTableName = "hivetest";
-        String projectId = "testProject";
+//        String hiveTableName = "travelscenicreview";
+//        String projectId = "hengqin";
+//        String batchId = "67115b30d5fd47dc9c89095eb6c9177f";
+//        String sqlString = "select * from  " + hiveTableName + "  where  projectId=  '" + projectId + "'  and batchId= '" + batchId + "'";
+//        JavaRDD<String> rddData = hiveUtils.getRddData(dataBase, sqlString);
+//        List<String> collect = rddData.collect();
+//        for (String s : collect) {
+//            System.out.println(s);
+//        }
+
+        String hiveTableName = "travelscenicreview";
+        String projectId = "hengqin";
         String batchId = "testBatch";
-        String sqlString = "select jsondata from  " + hiveTableName + "  where  projectId=  '" + projectId + "'  and batchId= '" + batchId + "'";
+        String sqlString = "select * from  " + hiveTableName + "  where  projectId=  '" + projectId + "'  and batchId= '" + batchId + "'";
         JavaRDD<String> rddData = hiveUtils.getRddData(dataBase, sqlString);
         List<String> collect = rddData.collect();
+        System.out.println("****** 查出的结果 " + collect.size() );
         for (String s : collect) {
-            System.out.println(s);
+            System.out.println("******" + s);
         }
 
     }

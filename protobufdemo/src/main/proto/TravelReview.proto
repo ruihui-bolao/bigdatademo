@@ -1,0 +1,25 @@
+option java_outer_classname = "TravelReview";
+package com.sdyc.etl.commons.client;
+
+message TravelScenicReview {
+    required int64 createdAt= 1;
+    optional string postId=2;
+	optional string postTitle=3;
+	optional string	userId=4;
+	optional string	screenName=5;
+	optional string postContentText=6;
+	optional string postGroupName=7;
+	optional int32 cntRead=8;
+	optional int32 cntReplied=9;
+	optional int32 likes=10;
+	optional string mblogImageUrl1=11;
+	optional int32 postType=12;
+	optional int32 postStatus =13;
+	optional string sourceClientName=14;
+	optional string postUrl =15;
+	optional string poiId=16;
+	optional int64 serviceTypeUrn=17;
+	optional int64 entitySectionUrn=18;
+	repeated string scores=19;
+	optional string	scenicName=20;
+}

@@ -81,4 +81,12 @@
 	    <name>dfs.ha.fencing.ssh.private-key-files</name>
 	    <value>/home/hadoop/.ssh/id_rsa</value>
 	</property>
+    <property>
+        <name>dfs.permissions.enabled</name>
+        <value>false</value>
+    </property>
+<property>
+  <name>dfs.umask</name>
+  <value>002</value>
+</property>
 </configuration>
